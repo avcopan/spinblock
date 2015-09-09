@@ -25,4 +25,4 @@ class SpinBlockedArray:
     if not hasattr(self.blocks[block_keys], '__setitem__'):
       self.blocks[block_keys] = np.zeros(tuple(len(self.ranges[key]) for key in block_keys))
     self.blocks[block_keys][array_keys] = value
-    
+
