@@ -623,3 +623,203 @@ DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.00s       0
 DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w      6 calls
 
 ***********************************************************
+
+Host: hal
+
+Timers On : Sat Oct 10 14:05:45 2015
+Timers Off: Sat Oct 10 14:05:46 2015
+
+Wall Time:        1.00 seconds
+
+Form H      :       0.00u       0.00s       0.00w      1 call
+Form S/X    :       0.00u       0.00s       0.00w      1 call
+Guess       :       0.00u       0.00s       0.00w      1 call
+Form G      :       0.00u       0.13s       0.00w      7 calls
+JK: D       :       0.00u       0.00s       0.00w      7 calls
+JK: JK      :       0.00u       0.12s       0.00w      7 calls
+Form F      :       0.00u       0.00s       0.00w      7 calls
+DIIS        :       0.00u       0.00s       0.00w      7 calls
+DIISManager::add_entry:       0.00u       0.00s       0.00w      7 calls
+Form C      :       0.00u       0.00s       0.00w      7 calls
+Form D      :       0.00u       0.00s       0.00w      7 calls
+DIISManager::extrapolate:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w      6 calls
+
+***********************************************************
+
+Host: hal
+
+Timers On : Sat Oct 10 14:22:39 2015
+Timers Off: Sat Oct 10 14:22:39 2015
+
+Wall Time:        0.00 seconds
+
+Form H      :       0.00u       0.00s       0.00w      1 call
+Form S/X    :       0.00u       0.00s       0.00w      1 call
+Guess       :       0.00u       0.00s       0.00w      1 call
+Form G      :       0.01u       0.02s       0.00w      7 calls
+JK: D       :       0.00u       0.00s       0.00w      7 calls
+JK: JK      :       0.01u       0.02s       0.00w      7 calls
+Form F      :       0.00u       0.00s       0.00w      7 calls
+DIIS        :       0.00u       0.00s       0.00w      7 calls
+DIISManager::add_entry:       0.00u       0.00s       0.00w      7 calls
+Form C      :       0.00u       0.00s       0.00w      7 calls
+Form D      :       0.00u       0.00s       0.00w      7 calls
+DIISManager::extrapolate:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w      6 calls
+
+***********************************************************
+
+Host: hal
+
+Timers On : Sat Oct 10 14:24:13 2015
+Timers Off: Sat Oct 10 14:24:14 2015
+
+Wall Time:        1.00 seconds
+
+Form H      :       0.00u       0.00s       0.00w      1 call
+Form S/X    :       0.00u       0.00s       0.00w      1 call
+Guess       :       0.00u       0.00s       0.00w      1 call
+Form G      :       0.03u       0.15s       0.00w      7 calls
+JK: D       :       0.00u       0.00s       0.00w      7 calls
+JK: JK      :       0.02u       0.13s       0.00w      7 calls
+Form F      :       0.00u       0.00s       0.00w      7 calls
+DIIS        :       0.00u       0.02s       0.00w      7 calls
+DIISManager::add_entry:       0.00u       0.01s       0.00w      7 calls
+Form C      :       0.00u       0.01s       0.00w      7 calls
+Form D      :       0.00u       0.00s       0.00w      7 calls
+DIISManager::extrapolate:       0.00u       0.01s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: form new data:       0.00u       0.01s       0.00w      6 calls
+
+***********************************************************
+
+Host: hal
+
+Timers On : Sat Oct 10 14:25:10 2015
+Timers Off: Sat Oct 10 14:25:10 2015
+
+Wall Time:        0.00 seconds
+
+Form H      :       0.00u       0.00s       0.00w      1 call
+Form S/X    :       0.00u       0.00s       0.00w      1 call
+Guess       :       0.00u       0.00s       0.00w      1 call
+Form G      :       0.01u       0.17s       0.00w      7 calls
+JK: D       :       0.00u       0.00s       0.00w      7 calls
+JK: JK      :       0.01u       0.13s       0.00w      7 calls
+Form F      :       0.00u       0.00s       0.00w      7 calls
+DIIS        :       0.00u       0.01s       0.00w      7 calls
+DIISManager::add_entry:       0.00u       0.00s       0.00w      7 calls
+Form C      :       0.00u       0.00s       0.00w      7 calls
+Form D      :       0.00u       0.00s       0.00w      7 calls
+DIISManager::extrapolate:       0.00u       0.01s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w      6 calls
+
+***********************************************************
+
+Host: hal
+
+Timers On : Sat Oct 10 14:26:04 2015
+Timers Off: Sat Oct 10 14:26:05 2015
+
+Wall Time:        1.00 seconds
+
+Form H      :       0.00u       0.01s       0.00w      1 call
+Form S/X    :       0.00u       0.00s       0.00w      1 call
+Guess       :       0.00u       0.00s       0.00w      1 call
+Form G      :       0.00u       0.01s       0.00w      7 calls
+JK: D       :       0.00u       0.00s       0.00w      7 calls
+JK: JK      :       0.00u       0.01s       0.00w      7 calls
+Form F      :       0.00u       0.00s       0.00w      7 calls
+DIIS        :       0.01u       0.01s       0.00w      7 calls
+DIISManager::add_entry:       0.01u       0.00s       0.00w      7 calls
+Form C      :       0.00u       0.00s       0.00w      7 calls
+Form D      :       0.00u       0.00s       0.00w      7 calls
+DIISManager::extrapolate:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w      6 calls
+
+***********************************************************
+
+Host: hal
+
+Timers On : Sat Oct 10 14:26:38 2015
+Timers Off: Sat Oct 10 14:26:39 2015
+
+Wall Time:        1.00 seconds
+
+Form H      :       0.01u       0.03s       0.00w      1 call
+Form S/X    :       0.00u       0.00s       0.00w      1 call
+Guess       :       0.00u       0.00s       0.00w      1 call
+Form G      :       0.01u       0.04s       0.00w      7 calls
+JK: D       :       0.00u       0.00s       0.00w      7 calls
+JK: JK      :       0.01u       0.03s       0.00w      7 calls
+Form F      :       0.00u       0.00s       0.00w      7 calls
+DIIS        :       0.00u       0.01s       0.00w      7 calls
+DIISManager::add_entry:       0.00u       0.00s       0.00w      7 calls
+Form C      :       0.00u       0.00s       0.00w      7 calls
+Form D      :       0.00u       0.00s       0.00w      7 calls
+DIISManager::extrapolate:       0.00u       0.01s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.01s       0.00w      6 calls
+DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w      6 calls
+
+***********************************************************
+
+Host: hal
+
+Timers On : Sat Oct 10 14:31:42 2015
+Timers Off: Sat Oct 10 14:31:43 2015
+
+Wall Time:        1.00 seconds
+
+Form H      :       0.00u       0.01s       0.00w      1 call
+Form S/X    :       0.00u       0.00s       0.00w      1 call
+Guess       :       0.00u       0.00s       0.00w      1 call
+Form G      :       0.00u       0.01s       0.00w      7 calls
+JK: D       :       0.00u       0.00s       0.00w      7 calls
+JK: JK      :       0.00u       0.01s       0.00w      7 calls
+Form F      :       0.00u       0.00s       0.00w      7 calls
+DIIS        :       0.01u       0.01s       0.00w      7 calls
+DIISManager::add_entry:       0.00u       0.01s       0.00w      7 calls
+Form C      :       0.00u       0.00s       0.00w      7 calls
+Form D      :       0.00u       0.00s       0.00w      7 calls
+DIISManager::extrapolate:       0.01u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.01u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w      6 calls
+
+***********************************************************
+
+Host: hal
+
+Timers On : Sat Oct 10 14:31:56 2015
+Timers Off: Sat Oct 10 14:31:57 2015
+
+Wall Time:        1.00 seconds
+
+Form H      :       0.01u       0.00s       0.00w      1 call
+Form S/X    :       0.00u       0.00s       0.00w      1 call
+Guess       :       0.00u       0.00s       0.00w      1 call
+Form G      :       0.00u       0.05s       0.00w      7 calls
+JK: D       :       0.00u       0.00s       0.00w      7 calls
+JK: JK      :       0.00u       0.01s       0.00w      7 calls
+Form F      :       0.00u       0.00s       0.00w      7 calls
+DIIS        :       0.00u       0.00s       0.00w      7 calls
+DIISManager::add_entry:       0.00u       0.00s       0.00w      7 calls
+Form C      :       0.00u       0.00s       0.00w      7 calls
+Form D      :       0.00u       0.00s       0.00w      7 calls
+DIISManager::extrapolate:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.00s       0.00w      6 calls
+DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w      6 calls
+
+***********************************************************

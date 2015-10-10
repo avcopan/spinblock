@@ -2,6 +2,16 @@ import numpy as np
 import itertools as it
 from blockprinter import prettyprint
 
+'''
+This needs a rewrite:
+Data object of BlockedArray should be
+  tiles = np.empty( (outer shape), dtype = np.dtype(Tile) )
+where Tile is a sublcass of python object
+  class Tile(object):
+I think that should substantially simplify things
+
+'''
+
 class BlockedAxis:
 
   def __init__(self, block_dims):
@@ -24,7 +34,7 @@ class BlockedAxis:
 
   def get_block_key(self, key):
     block_key = next((i for i, r in enumerate(self.block_ranges) if fits_in(key, r)), None)
-    if not isinstance(block_key, int): raise Exception("Invalid key {:s} used for {:s}-blocked axis.".format(str(key), str(self.blockdims)))
+    if not isinstance(block_key, int): raise Exception("Invalid key {:s} used for {:s}-blocked axis.".format(str(key), str(self.block_dims)))
     else: return block_key
 
   def get_array_key(self, key):

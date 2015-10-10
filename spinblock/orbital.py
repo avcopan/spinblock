@@ -9,9 +9,23 @@ class Orbital:
     nsopi  = tuple(scfwfn.nsopi()[h] for h in range(nirrep))
     nso    = scfwfn.nso()
     pgU    = BlockedArray((nsopi, nso))
-    print nirrep
-    print nsopi
-    print nso
+    sotoao = mints.petite_list().sotoao()
+    for h in range(nirrep):
+      for i in range(sotoao.rows(h)):
+        for j in range(sotoao.cols(h)):
+          offset = pgU.get_axis(0).get_block_start(h)
+          pgU[i+offset,j] = sotoao.get(h, i, j)
+    print pgU
+
+    fock_alpha = scfwfn.Fa()
+    Fa = BlockedArray((nsopi, nsopi))
+    for h in range(nirrep):
+      for i in range(fock_alpha.rows(h)):
+        for j in range(fock_alpha.cols(h)):
+          row_offset = Fa.get_axis(0).get_block_start(h)
+          col_offset = Fa.get_axis(1).get_block_start(h)
+          Fa[i+row_offset, j+col_offset] = fock_alpha.get(h, i, j)
+    print Fa
 
 
 """
@@ -20,8 +34,8 @@ class Orbital:
     nbf  = mints.basisset().nbf()
     Ca = psi4.Matrix(nbf, nbf)
     Cb = psi4.Matrix(nbf, nbf)
-    Ca.remove_symmetry(scfwfn.Ca(), mints.petite_list().sotoao())
-    Cb.remove_symmetry(scfwfn.Cb(), mints.petite_list().sotoao())
+    Ca.remove_symmetry(scfwfn.Ca(), mints.petite_list().aotoso())
+    Cb.remove_symmetry(scfwfn.Cb(), mints.petite_list().aotoso())
     self.Ca = np.matrix(Ca)
     self.Cb = np.matrix(Cb)
 
@@ -29,7 +43,7 @@ class Orbital:
 
     print "symm:"
 
-    M = mints.petite_list().sotoao()
+    M = mints.petite_list().aotoso()
     irreps = []
     for h in range(4):
       rows = M.rows(h)

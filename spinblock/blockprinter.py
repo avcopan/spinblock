@@ -9,7 +9,7 @@ def get_block_string(blockedarray, block_keys):
   key    = str(block_keys)
   offset = str(blockedarray.get_block_offset(block_keys))
   shape  = str(blockedarray.get_block_shape (block_keys))
-  block  = str(blockedarray.get_block       (block_keys))
+  block  = str(blockedarray.get_block       (block_keys).round(4))
   fillstr = "  Block # {:s}:\n    {:8s} = {:s}\n    {:8s} = {:s}\n{:s}"
   return fillstr.format(key, "offset", offset, "shape", shape, block)
 
