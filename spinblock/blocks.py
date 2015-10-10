@@ -1,5 +1,6 @@
 import numpy as np
 import itertools as it
+from blockprinter import prettyprint
 
 class BlockedAxis:
 
@@ -16,6 +17,8 @@ class BlockedAxis:
   def get_dim         (self           ):  return self.dim
   def get_nblocks     (self           ):  return self.nblocks
   def get_block_keys  (self           ):  return self.block_keys
+  def get_block_dims  (self           ):  return self.block_dims
+  def get_block_starts(self           ):  return self.block_starts
   def get_block_dim   (self, block_key):  return self.block_dims  [block_key]
   def get_block_start (self, block_key):  return self.block_starts[block_key]
 
@@ -42,12 +45,20 @@ class BlockedArray:
   def __init__(self, shape):
     self._ndim   = len(shape)
     self._axes   = tuple(BlockedAxis(blockdims) for blockdims in shape)
-    self._blocks = {block_keys: 0. for block_keys in it.product(*axes_getattr("get_block_keys",self._axes))}
+    self._blocks = {block_keys: 0. for block_keys in self.iter_block_keys()}
+
+  def get_block       (self, block_keys): return self._blocks[block_keys]
+  def get_axis        (self,  axis_key ): return self._axes  [ axis_key ]
+  def get_block_keys  (self,       keys): return axes_getattr("get_block_key"  , self._axes,       keys)
+  def get_array_keys  (self,       keys): return axes_getattr("get_array_key"  , self._axes,       keys)
+  def get_block_shape (self, block_keys): return axes_getattr("get_block_dim"  , self._axes, block_keys)
+  def get_block_offset(self, block_keys): return axes_getattr("get_block_start", self._axes, block_keys)
+  def iter_axes       (self, slc=slice(None)): return (ax for ax in self._axes[slc])
+  def iter_block_keys (self, slc=slice(None)): return it.product(*axes_getattr("get_block_keys", self._axes[slc]))
 
   def __getitem__(self, *args):
     keys, = args
-    block_keys = axes_getattr("get_block_key", self._axes, keys)
-    array_keys = axes_getattr("get_array_key", self._axes, keys)
+    block_keys, array_keys = self.get_block_keys(keys), self.get_array_keys(keys)
     block = self._blocks[block_keys]
     return block if not hasattr(block,'__getitem__') else block[array_keys]
 
@@ -59,42 +70,5 @@ class BlockedArray:
       self._blocks[block_keys] = np.zeros(axes_getattr("get_block_dim", self._axes, block_keys))
     self._blocks[block_keys][array_keys] = value
 
-  def get_block_string(self, block_keys):
-    key    = str(block_keys)
-    offset = str(axes_getattr("get_block_start", self._axes, block_keys))
-    shape  = str(axes_getattr("get_block_dim"  , self._axes, block_keys))
-    block  = str(self._blocks[block_keys])
-    fillstr = "Block # {:s}:\n  {:15s} = {:s}\n  {:15s} = {:s}\n{:s}\n"
-    return fillstr.format(key, "offset", offset, "shape", shape, block)
-
   def __repr__(self):
-    dtype         = np.dtype([('active',np.bool_), ('shape',np.uint64,(self.ndim,))])
-    structure     = np.zeros(axes_getattr("get_nblocks", self._axes), dtype)
-    active_blocks = []
-    for block_keys in it.product(*axes_getattr("get_block_keys", self._axes))
-      
-    return ''.join(self.get_block_string(block_keys) for block_keys in it.product(*axes_getattr("get_block_keys",self._axes)))
-
-
-'''
-  def __repr__(self):
-    return ''.join("Block {:s}:\n{:s}\n".format(str(block_keys), str(self._blocks[block_keys]))
-                   for block_keys in it.product(*(axis.keys for axis in self._axes)))
-
-class BlockedArray:
-
-  def __init__(self, blocks_by_axis):
-    ndim = len(blocks_by_axis)
-    block_shape  = tuple(len(axis_blocks) for axis_blocks in blocks_by_axis)
-    dtype = np.dtype([('active',np.bool_), ('shape',np.uint64,(ndim,))])
-    block_struct = np.zeros(block_shape, dtype=dtype)
-    for x in it.product(*tuple(enumerate(axis_blocks) for axis_blocks in blocks_by_axis)):
-      index, shape = zip(*x)
-      for i, dim in enumerate(shape):
-        block_struct[index]['shape'][i] = dim
-
-      print np.zeros(block_struct[index]['shape'])
-
-    print block_struct
-
-'''
+    return prettyprint(self)
