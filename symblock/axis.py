@@ -26,6 +26,12 @@ class PartitionedAxis:
     else:
       return partition_key
 
+  def get_subkey(self, index):
+    partition_start = self.get_partition_start(self.get_partition_key(index))
+    if   isinstance(index,   int): return index - partition_start
+    elif isinstance(index, slice): return slice(index.start - partition_start, index.edn - partition_end)
+    
+
 def fits_in(index, arange):
   if   isinstance(index,   int): return index in arange
   elif isinstance(index, slice): return index.start in arange and index.stop - 1 in arange

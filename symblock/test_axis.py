@@ -30,6 +30,15 @@ def test_get_partition_key____1():
   assert PartitionedAxis(7).get_partition_key(5) == 0
   assert PartitionedAxis(7).get_partition_key(6) == 0
 
+def test_get_subkey___________1():
+  assert PartitionedAxis(7).get_subkey(0) == 0
+  assert PartitionedAxis(7).get_subkey(1) == 1
+  assert PartitionedAxis(7).get_subkey(2) == 2
+  assert PartitionedAxis(7).get_subkey(3) == 3
+  assert PartitionedAxis(7).get_subkey(4) == 4
+  assert PartitionedAxis(7).get_subkey(5) == 5
+  assert PartitionedAxis(7).get_subkey(6) == 6
+
 def test_get_dim______________2():
   assert PartitionedAxis((4,0,1,2)).get_dim() == 7
 
@@ -65,4 +74,13 @@ def test_get_partition_key____2():
   assert PartitionedAxis((4,0,1,2)).get_partition_key(4) == 2
   assert PartitionedAxis((4,0,1,2)).get_partition_key(5) == 3
   assert PartitionedAxis((4,0,1,2)).get_partition_key(6) == 3
+
+def test_get_subkey___________2():
+  assert PartitionedAxis((4,0,1,2)).get_subkey(0) == 0
+  assert PartitionedAxis((4,0,1,2)).get_subkey(1) == 1
+  assert PartitionedAxis((4,0,1,2)).get_subkey(2) == 2
+  assert PartitionedAxis((4,0,1,2)).get_subkey(3) == 3
+  assert PartitionedAxis((4,0,1,2)).get_subkey(4) == 0
+  assert PartitionedAxis((4,0,1,2)).get_subkey(5) == 0
+  assert PartitionedAxis((4,0,1,2)).get_subkey(6) == 1
 
