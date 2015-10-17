@@ -1,4 +1,4 @@
-class PartitionedAxis:
+class PartitionedAxis(object):
 
   def __init__(self, partition_sizes):
     if isinstance(partition_sizes, int): partition_sizes = (partition_sizes,)

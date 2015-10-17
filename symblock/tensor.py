@@ -7,7 +7,7 @@ def multi_axis_getattr(method, axes, args = None):
   if   args is None: return tuple(getattr(PartitionedAxis, method)(axis      ) for axis       in     axes       )
   else             : return tuple(getattr(PartitionedAxis, method)(axis, args) for axis, args in zip(axes, args))
 
-class TiledTensor:
+class TiledTensor(object):
 
   def __init__(self, axes):
     self._ndim  = len(axes)
