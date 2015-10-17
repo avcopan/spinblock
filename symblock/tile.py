@@ -20,14 +20,14 @@ class Tile(object):
     if self.is_empty(): self._array = np.zeros(self._shape)
     self._array.__setitem__(*args)
 
-  def __add__ (self, other): print('__add__ '); return self.binary_operation(other, operator.__add__)
-  def __sub__ (self, other): print('__sub__ '); return self.binary_operation(other, operator.__sub__)
-  def __mul__ (self, other): print('__mul__ '); return self.binary_operation(other, operator.__mul__)
-  def __div__ (self, other): print('__div__ '); return self.binary_operation(other, operator.__div__)
-  def __radd__(self, other): print('__radd__'); return self.binary_operation(other, operator.__add__, swap=True)
-  def __rsub__(self, other): print('__rsub__'); return self.binary_operation(other, operator.__sub__, swap=True)
-  def __rmul__(self, other): print('__rmul__'); return self.binary_operation(other, operator.__mul__, swap=True)
-  def __rdiv__(self, other): print('__rdiv__'); return self.binary_operation(other, operator.__div__, swap=True)
+  def __add__ (self, other): return self.binary_operation(other, operator.__add__)
+  def __sub__ (self, other): return self.binary_operation(other, operator.__sub__)
+  def __mul__ (self, other): return self.binary_operation(other, operator.__mul__)
+  def __div__ (self, other): return self.binary_operation(other, operator.__div__)
+  def __radd__(self, other): return self.binary_operation(other, operator.__add__, swap=True)
+  def __rsub__(self, other): return self.binary_operation(other, operator.__sub__, swap=True)
+  def __rmul__(self, other): return self.binary_operation(other, operator.__mul__, swap=True)
+  def __rdiv__(self, other): return self.binary_operation(other, operator.__div__, swap=True)
 
   def binary_operation(self, other, operation, swap=False):
     if isinstance(other, Tile) and not self._shape == other._shape:
