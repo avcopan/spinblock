@@ -10,6 +10,8 @@ class PartitionedAxis(object):
     self._partition_stops  = self._partition_starts[1:] + [self._dim]
     self._partitions       = [range(start, stop) for start, stop in zip(self._partition_starts, self._partition_stops)]
 
+  def __repr__(self): return 'PartitionedAxis: {:d} -> {:s}'.format(self.get_dim(), str(self.get_partition_sizes()))
+
   def get_dim             (self): return self._dim
   def get_npartitions     (self): return self._npartitions
   def get_partition_keys  (self): return self._partition_keys

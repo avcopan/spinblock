@@ -39,6 +39,9 @@ def test_get_subkey___________1():
   assert PartitionedAxis(7).get_subkey(5) == 5
   assert PartitionedAxis(7).get_subkey(6) == 6
 
+def test___repr_______________1():
+  assert str(PartitionedAxis(7)) == "PartitionedAxis: 7 -> (7,)"
+
 def test_get_dim______________2():
   assert PartitionedAxis((4,0,1,2)).get_dim() == 7
 
@@ -84,3 +87,5 @@ def test_get_subkey___________2():
   assert PartitionedAxis((4,0,1,2)).get_subkey(5) == 0
   assert PartitionedAxis((4,0,1,2)).get_subkey(6) == 1
 
+def test___repr_______________2():
+  assert str(PartitionedAxis((4,0,1,2))) == "PartitionedAxis: 7 -> (4, 0, 1, 2)"

@@ -10,11 +10,12 @@ def multi_axis_getattr(method, axes, args = None):
 class TiledTensor(object):
 
   def __init__(self, axes, tiles = None):
+    self._ndim  = len(axes)
     self._axes  = axes
     self._shape = self.get_tile_container_shape()
     if not tiles is None:
       if   not (isinstance(tiles, np.ndarray) and tiles.dtype == np.dtype(Tile)):
-        raise TypeError ("Cannot initialize TiledTensor with object of type '{:s}'".format(type(array).__name__))
+        raise TypeError ("Cannot initialize TiledTensor with this object of type '{:s}'".format(type(tiles).__name__))
       elif not tiles.shape == self._shape:
         raise ValueError("Cannot initialize {:s}-blocked TiledTensor with Tile array of shape {:s}".format(str(self._shape), str(tiles.shape)))
       self._tiles = tiles
@@ -23,12 +24,15 @@ class TiledTensor(object):
       for tile_key in self.iter_tile_keys():
         self._tiles[tile_key] = Tile(self.get_tile_shape(tile_key))
 
-  def get_tile_container_shape(self): return multi_axis_getattr("get_npartitions", self._axes)
-  def iter_tile_keys          (self): return it.product(*multi_axis_getattr("get_partition_keys", self._axes))
+  def get_tile       (self, tile_key  ): return self._tiles[tile_key]
+  def get_tile_container_shape(self   ): return multi_axis_getattr("get_npartitions"    , self._axes          )
   def get_subkey     (self, index     ): return multi_axis_getattr("get_subkey"         , self._axes, index   )
   def get_tile_key   (self, index     ): return multi_axis_getattr("get_partition_key"  , self._axes, index   )
   def get_tile_shape (self, tile_key  ): return multi_axis_getattr("get_partition_size" , self._axes, tile_key)
   def get_tile_offset(self, tile_key  ): return multi_axis_getattr("get_partition_start", self._axes, tile_key)
+  def iter_tile_keys (self, slc=slice(None)): return it.product(*multi_axis_getattr("get_partition_keys", self._axes[slc]))
+
+  def __repr__(self): from prettyprint import TiledTensor_to_str; return TiledTensor_to_str(self)
 
   def __getitem__(self, *args): return self._tiles[self.get_tile_key(args[0])][self.get_subkey(args[0])]
   def __setitem__(self, *args):        self._tiles[self.get_tile_key(args[0])][self.get_subkey(args[0])] = args[1]
