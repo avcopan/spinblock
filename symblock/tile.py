@@ -9,6 +9,7 @@ class Tile(object):
         raise TypeError ("Cannot initialize Tile with object of type '{:s}'".format(type(array).__name__))
       elif not array.shape == shape:
         raise ValueError("Cannot initialize {:s}-shaped Tile with an array of shape {:s}".format(str(shape), str(array.shape)))
+    self._ndim    = len(shape)
     self._shape   = shape
     self._array   = array
 
@@ -19,6 +20,11 @@ class Tile(object):
   def __setitem__(self, *args):
     if self.is_empty(): self._array = np.zeros(self._shape)
     self._array.__setitem__(*args)
+
+  def transpose(self, axis_keys = None):
+    if axis_keys is None: axis_keys = tuple(reversed(range(self._ndim)))
+    shape = tuple(self._shape[axis_key] for axis_key in axis_keys)
+    return Tile(shape, None) if self.is_empty() else Tile(shape, self._array.transpose(axis_keys))
 
   def __pos__ (self       ): return self if self.is_empty() else Tile(self._shape, +self._array)
   def __neg__ (self       ): return self if self.is_empty() else Tile(self._shape, -self._array)

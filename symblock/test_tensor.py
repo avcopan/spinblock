@@ -69,7 +69,21 @@ if __name__ == "__main__":
   print L + R
   print R + L
 
+  a1 = PartitionedAxis(2)
+  a2 = PartitionedAxis((1,2))
+  a3 = PartitionedAxis((2,1,1))
+  T = TiledTensor((a1, a2, a3))
+  for i in range(2):
+    for j in range(3):
+      for k in range(4):
+        T[i,j,k] = i*3*4 + j*4 + k
+  G = T.transpose()
+  for i in range(2):
+    for j in range(3):
+      for k in range(4):
+        print G[k,j,i] == i*3*4 + j*4 + k
+  print G
+  print G.transpose()
+
   from tensordot import tensordot
-  T1 = TiledTensor((ax2, ax2, ax2))
-  T2 = TiledTensor((ax2, ax2, ax2))
-  tensordot(T1, T2, axes=([1,2],[0,3]))
+  tensordot(T, T, axis_keys=([0,1],[0,1]))

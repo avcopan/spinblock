@@ -33,11 +33,22 @@ class TiledTensor(object):
   def get_tile_shape (self, tile_key  ): return multi_axis_getattr("get_partition_size" , self._axes, tile_key)
   def get_tile_offset(self, tile_key  ): return multi_axis_getattr("get_partition_start", self._axes, tile_key)
   def iter_tile_keys (self, slc=slice(None)):  return multi_axis_iter(self._axes[slc])
+  def iter_axes      (self            ): return (axis     for axis     in self._axes       )
+  def iter_axis_keys (self            ): return (axis_key for axis_key in range(self._ndim))
+  def get_axis       (self, axis_key  ): return self._axes[axis_key]
 
   def __repr__(self): from prettyprint import TiledTensor_to_str; return TiledTensor_to_str(self)
 
   def __getitem__(self, *args): return self._tiles[self.get_tile_key(args[0])][self.get_subkey(args[0])]
   def __setitem__(self, *args):        self._tiles[self.get_tile_key(args[0])][self.get_subkey(args[0])] = args[1]
+
+  def transpose(self, axis_keys = None):
+    if axis_keys is None: axis_keys = tuple(reversed(range(self._ndim)))
+    tiles = self._tiles.transpose(axis_keys)
+    axes  = tuple(self._axes[axis_key] for axis_key in axis_keys)
+    for tile_key in multi_axis_iter(axes):
+      tiles[tile_key] = tiles[tile_key].transpose(axis_keys)
+    return TiledTensor(axes, tiles)
 
   def __pos__ (self       ): return TiledTensor(self._axes, +self._tiles)
   def __neg__ (self       ): return TiledTensor(self._axes, -self._tiles)

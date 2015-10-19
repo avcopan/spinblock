@@ -458,9 +458,42 @@ def test___div______10():
     for j in range(7):
       assert T[i,j] == 2.0
 
+def test_transpose__01():
+  T = Tile((2,3,4))
+  T = T.transpose()
+  assert T.get_shape() == (4,3,2)
+
+def test_transpose__02():
+  T = Tile((2,3,4))
+  T = T.transpose((0,2,1))
+  assert T.get_shape() == (2,4,3)
+
+def test_transpose__03():
+  T = Tile((2,3,4), np.arange(2*3*4).reshape((2,3,4)))
+  T = T.transpose()
+  assert T.get_shape() == (4,3,2)
+  for i in range(2):
+    for j in range(3):
+      for k in range(4):
+        assert T[k,j,i] == i*3*4 + j*4 + k
+
+def test_transpose__04():
+  T = Tile((2,3,4), np.arange(2*3*4).reshape((2,3,4)))
+  T = T.transpose((0,2,1))
+  assert T.get_shape() == (2,4,3)
+  for i in range(2):
+    for j in range(3):
+      for k in range(4):
+        assert T[i,k,j] == i*3*4 + j*4 + k
+
 
 if __name__ == "__main__":
   L = Tile((5, 7), np.ones((5, 7)))
   R = Tile((5, 7))
   T = L + R
   print T
+  T = Tile((2,3,4), np.arange(2*3*4).reshape((2,3,4)))
+  print T.get_shape()
+  print T
+  print T.transpose().get_shape()
+  print T.transpose()
