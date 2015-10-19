@@ -7,6 +7,8 @@ def multi_axis_getattr(method, axes, args = None):
   if   args is None: return tuple(getattr(PartitionedAxis, method)(axis      ) for axis       in     axes       )
   else             : return tuple(getattr(PartitionedAxis, method)(axis, args) for axis, args in zip(axes, args))
 
+def multi_axis_iter(axes): return it.product(*multi_axis_getattr("get_partition_keys", axes))
+
 class TiledTensor(object):
 
   def __init__(self, axes, tiles = None):
@@ -30,13 +32,15 @@ class TiledTensor(object):
   def get_tile_key   (self, index     ): return multi_axis_getattr("get_partition_key"  , self._axes, index   )
   def get_tile_shape (self, tile_key  ): return multi_axis_getattr("get_partition_size" , self._axes, tile_key)
   def get_tile_offset(self, tile_key  ): return multi_axis_getattr("get_partition_start", self._axes, tile_key)
-  def iter_tile_keys (self, slc=slice(None)): return it.product(*multi_axis_getattr("get_partition_keys", self._axes[slc]))
+  def iter_tile_keys (self, slc=slice(None)):  return multi_axis_iter(self._axes[slc])
 
   def __repr__(self): from prettyprint import TiledTensor_to_str; return TiledTensor_to_str(self)
 
   def __getitem__(self, *args): return self._tiles[self.get_tile_key(args[0])][self.get_subkey(args[0])]
   def __setitem__(self, *args):        self._tiles[self.get_tile_key(args[0])][self.get_subkey(args[0])] = args[1]
 
+  def __pos__ (self       ): return TiledTensor(self._axes, +self._tiles)
+  def __neg__ (self       ): return TiledTensor(self._axes, -self._tiles)
   def __add__ (self, other): return self.binary_operation(other, np.ndarray.__add__ )
   def __sub__ (self, other): return self.binary_operation(other, np.ndarray.__sub__ )
   def __mul__ (self, other): return self.binary_operation(other, np.ndarray.__mul__ )

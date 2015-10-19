@@ -13,7 +13,7 @@ def TiledTensor_to_str(tiledtensor):
   for row in rows: string += '  ' + label_format(row) + ''.join(element_format(tiledtensor._tiles[row+col]) for col in cols) + '\n'
   for tile_key in tiledtensor.iter_tile_keys():
     if not tiledtensor.get_tile(tile_key).is_empty():
-      ranges  = ','.join("{:d}-{:d}".format(offset, offset + size) for offset, size in zip(tiledtensor.get_tile_offset(tile_key),
-                                                                                            tiledtensor.get_tile_shape (tile_key)))
+      ranges  = ','.join("{:d}-{:d}".format(offset, offset + size - 1) for offset, size in zip(tiledtensor.get_tile_offset(tile_key),
+                                                                                               tiledtensor.get_tile_shape (tile_key)))
       string += "\n  Tile {:s} holds elements ({:s}):\n    ".format(str(tile_key), ranges) + str(tiledtensor.get_tile(tile_key)).replace("\n","\n    ") + "\n"
   return "TiledTensor {{\n{:s}}}".format(string)

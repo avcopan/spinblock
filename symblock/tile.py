@@ -20,22 +20,25 @@ class Tile(object):
     if self.is_empty(): self._array = np.zeros(self._shape)
     self._array.__setitem__(*args)
 
-  def __add__ (self, other): return self.binary_operation(other, operator.__add__)
-  def __sub__ (self, other): return self.binary_operation(other, operator.__sub__)
-  def __mul__ (self, other): return self.binary_operation(other, operator.__mul__)
-  def __div__ (self, other): return self.binary_operation(other, operator.__div__)
-  def __radd__(self, other): return self.binary_operation(other, operator.__add__, swap=True)
-  def __rsub__(self, other): return self.binary_operation(other, operator.__sub__, swap=True)
-  def __rmul__(self, other): return self.binary_operation(other, operator.__mul__, swap=True)
-  def __rdiv__(self, other): return self.binary_operation(other, operator.__div__, swap=True)
+  def __pos__ (self       ): return self if self.is_empty() else Tile(self._shape, +self._array)
+  def __neg__ (self       ): return self if self.is_empty() else Tile(self._shape, -self._array)
+  def __add__ (self, other): return self.binary_operation(other, operator.__add__, multp=False, swap=False)
+  def __sub__ (self, other): return self.binary_operation(other, operator.__sub__, multp=False, swap=False)
+  def __mul__ (self, other): return self.binary_operation(other, operator.__mul__, multp=True , swap=False)
+  def __div__ (self, other): return self.binary_operation(other, operator.__div__, multp=True , swap=False)
+  def __radd__(self, other): return self.binary_operation(other, operator.__add__, multp=False, swap=True )
+  def __rsub__(self, other): return self.binary_operation(other, operator.__sub__, multp=False, swap=True )
+  def __rmul__(self, other): return self.binary_operation(other, operator.__mul__, multp=True , swap=True )
+  def __rdiv__(self, other): return self.binary_operation(other, operator.__div__, multp=True , swap=True )
 
-  def binary_operation(self, other, operation, swap=False):
+  def binary_operation(self, other, operation, multp=False, swap=False):
     if isinstance(other, Tile) and not self._shape == other._shape:
       raise ValueError("Cannot {:s} Tiles with mismatched shapes {:s} and {:s}".format(operation.__name__, self._shape, other._shape))
     if self.is_empty() and (not isinstance(other, Tile) or other.is_empty()):
+      return Tile(self._shape, None)
+    if multp and (self.is_empty() or (isinstance(other, Tile) and other.is_empty())):
       return Tile(self._shape, None)
     larray = self._array if not self.is_empty() else 0.0
     rarray = other if not isinstance(other, Tile) else (other._array if not other.is_empty() else 0.0)
     oarray = operation(larray, rarray) if not swap else operation(rarray, larray)
     return Tile(self._shape, oarray)
-

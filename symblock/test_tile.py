@@ -417,9 +417,7 @@ def test___div______05():
   R = Tile((5, 7))
   T = L / R
   assert isinstance(T, Tile)
-  for i in range(5):
-    for j in range(7):
-      assert T[i,j] == np.inf
+  assert T.is_empty()
 
 def test___div______06():
   L = Tile((5, 7))
@@ -460,3 +458,9 @@ def test___div______10():
     for j in range(7):
       assert T[i,j] == 2.0
 
+
+if __name__ == "__main__":
+  L = Tile((5, 7), np.ones((5, 7)))
+  R = Tile((5, 7))
+  T = L + R
+  print T
