@@ -1,9 +1,10 @@
 import tensor as tn
 
-import numpy  as np
-import pytest as pt
-import tile as tl
-import axis as ax
+import numpy     as np
+import pytest    as pt
+import itertools as it
+import tile      as tl
+import axis      as ax
 ax1 = ax.PartitionedAxis(7)
 ax2 = ax.PartitionedAxis((4,0,1,2))
 ax3 = ax.PartitionedAxis((4,1,0,2))
@@ -60,8 +61,22 @@ def test___getitem________________01():
   T = tn.TiledTensor((ax2, ax2))
   assert T[0,0] == 0.0
 
+def test_tensordot________________01():
+  larray = np.random.rand(5,5)
+  rarray = np.random.rand(5,5)
+  tarray = np.tensordot(larray, rarray, axes=([1],[0]))
 
-if __name__ == "__main__":
+  a1 = ax.PartitionedAxis((5,5))
+  L = tn.TiledTensor((a1,a1))
+  R = tn.TiledTensor((a1,a1))
+  L[0:5,0:5] = L[5:10,5:10] = larray
+  R[0:5,0:5] = R[5:10,5:10] = rarray
+  T = tn.tensordot(L, R, axis_keys=([1],[0]))
+
+  assert (T[0: 5,0: 5] == tarray).all()
+  assert (T[5:10,5:10] == tarray).all()
+
+def test_tensordot________________02():
   a2 = ax.PartitionedAxis(2)
   a3 = ax.PartitionedAxis((1,2))
   a4 = ax.PartitionedAxis((2,1,1))
@@ -71,22 +86,27 @@ if __name__ == "__main__":
   larray = np.random.rand(2,3,4,5,6)
   rarray = np.random.rand(6,4,5,3,3)
   tarray = np.tensordot(larray, rarray, axes=([1,2,3,4],[3,1,2,0]))
-  print tarray
 
   L = tn.TiledTensor((a2,a3,a4,a5,a6))
   R = tn.TiledTensor((a6,a4,a5,a3,a3))
-  for i in range(2):
-    for j in range(3):
-      for k in range(4):
-        for l in range(5):
-          for m in range(6):
-            L[i,j,k,l,m] = larray[i,j,k,l,m]
-  for i in range(6):
-    for j in range(4):
-      for k in range(5):
-        for l in range(3):
-          for m in range(3):
-            R[i,j,k,l,m] = rarray[i,j,k,l,m]
+  for coord in it.product(*(range(dim) for dim in larray.shape)):
+    L[coord] = larray[coord]
+  for coord in it.product(*(range(dim) for dim in rarray.shape)):
+    R[coord] = rarray[coord]
   T = tn.tensordot(L, R, axis_keys=([1,2,3,4],[3,1,2,0]))
-  print T
+  for coord in it.product(*(range(dim) for dim in tarray.shape)):
+    assert abs(T[coord] - tarray[coord]) < 1e-13
 
+
+if __name__ == "__main__":
+  larray = np.random.rand(5,5)
+  rarray = np.random.rand(5,5)
+  tarray = np.tensordot(larray, rarray, axes=([1],[0]))
+  print tarray
+  a1 = ax.PartitionedAxis((5,5))
+  L = tn.TiledTensor((a1,a1))
+  R = tn.TiledTensor((a1,a1))
+  L[0:5,0:5] = L[5:10,5:10] = larray
+  R[0:5,0:5] = R[5:10,5:10] = rarray
+  T = tn.tensordot(L, R, axis_keys=([1],[0]))
+  print T

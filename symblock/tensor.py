@@ -17,10 +17,7 @@ def tensordot(L, R, axis_keys=([0],[0])):
   o = (0,) * ncontracted
   for r in multi_axis_iter(row_axes):
     for c in multi_axis_iter(col_axes):
-        T._tiles[r+c]  = contract_tiles(L.get_tile(o+r), R.get_tile(o+c))
-    for s in multi_axis_iter(sum_axes):
-      if s == o: continue
-      for c in multi_axis_iter(col_axes):
+      for s in multi_axis_iter(sum_axes):
         T._tiles[r+c] += contract_tiles(L.get_tile(s+r), R.get_tile(s+c))
   return T
 
