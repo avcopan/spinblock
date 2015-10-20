@@ -1,19 +1,27 @@
 import numpy as np
 import operator
 
+def tensordot(L, R, axis_keys=([0],[0])):
+  sum_axis_keys_L, sum_axis_keys_R = axis_keys
+  shape = [axis_dim for axis_key, axis_dim in enumerate(L.get_shape()) if not axis_key in sum_axis_keys_L] + \
+          [axis_dim for axis_key, axis_dim in enumerate(R.get_shape()) if not axis_key in sum_axis_keys_R]
+  if L.is_empty() or R.is_empty(): return Tile(shape, None)
+  else: return Tile(shape, np.tensordot(L._array, R._array, axes=axis_keys))
+
 class Tile(object):
 
   def __init__(self, shape, array = None):
+    self._ndim    = len  (shape)
+    self._shape   = tuple(shape)
     if not array is None:
       if not isinstance(array, np.ndarray):
         raise TypeError ("Cannot initialize Tile with object of type '{:s}'".format(type(array).__name__))
-      elif not array.shape == shape:
+      elif not array.shape == self._shape:
         raise ValueError("Cannot initialize {:s}-shaped Tile with an array of shape {:s}".format(str(shape), str(array.shape)))
-    self._ndim    = len(shape)
-    self._shape   = shape
     self._array   = array
 
   def get_shape  (self       ): return self._shape
+  def get_dim    (self, axis ): return self._shape[axis]
   def is_empty   (self       ): return self._array is None
   def __repr__   (self       ): return self._array.__str__()          if not self.is_empty() else "Empty Tile"
   def __getitem__(self, *args): return self._array.__getitem__(*args) if not self.is_empty() else 0.0
