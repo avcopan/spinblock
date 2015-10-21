@@ -53,6 +53,30 @@ def water_mp2_script(scfwfn, mints):
   nirrep = scfwfn.nirrep()
   nsopi  = tuple(scfwfn.nsopi()[h] for h in range(nirrep))
   nso    = scfwfn.nso()
-  print nirrep
-  print nsopi
-  print nso
+
+  import axis as ax
+  c1_axis  = ax.PartitionedAxis(nso)
+  c2v_axis = ax.PartitionedAxis(nsopi)
+
+  symmetrizer = mints.petite_list().sotoao()
+
+  import tensor as tn
+  U = tn.TiledTensor((c2v_axis, c1_axis))
+  for h in range(nirrep):
+    for i in range(symmetrizer.rows(h)):
+      for j in range(symmetrizer.cols(h)):
+        offset = c2v_axis.get_partition_start(h)
+        U[i+offset, j] = symmetrizer.get(h, i, j)
+
+  import numpy as np
+  c2v_g = tn.TiledTensor((c2v_axis, c2v_axis, c2v_axis, c2v_axis))
+  c1_g  = tn.TiledTensor(( c1_axis,  c1_axis,  c1_axis,  c1_axis))
+  c1_g[0:7,0:7,0:7,0:7] = np.array(mints.ao_eri())
+  g1    = tn.tensordot(U, c1_g, axis_keys=([1],[3]))
+  print g1.get_axis(0)
+  print g1.get_axis(1)
+  print g1.get_axis(2)
+  print g1.get_axis(3)
+  g2    = tn.tensordot(U,   g1, axis_keys=([1],[3]))
+  g1    = tn.tensordot(U,   g2, axis_keys=([1],[3]))
+  c2v_g = tn.tensordot(U,   g1, axis_keys=([1],[3]))

@@ -472,7 +472,8 @@ def test_transpose__02():
 def test_transpose__03():
   T = tl.Tile((2,3,4), np.arange(2*3*4).reshape((2,3,4)))
   T = T.transpose()
-  assert T.get_shape() == (4,3,2)
+  assert T.get_shape()  == (4,3,2)
+  assert T._array.shape == (4,3,2)
   for i in range(2):
     for j in range(3):
       for k in range(4):
@@ -481,7 +482,8 @@ def test_transpose__03():
 def test_transpose__04():
   T = tl.Tile((2,3,4), np.arange(2*3*4).reshape((2,3,4)))
   T = T.transpose((0,2,1))
-  assert T.get_shape() == (2,4,3)
+  assert T.get_shape()  == (2,4,3)
+  assert T._array.shape == (2,4,3)
   for i in range(2):
     for j in range(3):
       for k in range(4):
