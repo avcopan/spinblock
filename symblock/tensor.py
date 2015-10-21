@@ -14,7 +14,6 @@ def tensordot(L, R, axis_keys=([0],[0])):
 
   contract_tiles = lambda tile1, tile2: tl.tensordot(tile1, tile2, axis_keys=(range(ncontracted), range(ncontracted)))
   T = TiledTensor(row_axes + col_axes)
-  o = (0,) * ncontracted
   for r in multi_axis_iter(row_axes):
     for c in multi_axis_iter(col_axes):
       for s in multi_axis_iter(sum_axes):
