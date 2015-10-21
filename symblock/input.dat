@@ -1,0 +1,19 @@
+molecule {
+  O 
+  H 1 0.96
+  H 1 0.96 2 104.5
+}
+
+set basis sto-3g
+set scf_type pk
+set df_scf_guess false
+energy('scf')
+
+
+from symdot import water_mp2_script
+
+scfwfn = psi4.wavefunction()
+mints  = psi4.MintsHelper()
+
+water_mp2_script(scfwfn, mints)
+
