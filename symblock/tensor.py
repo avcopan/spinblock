@@ -10,14 +10,8 @@ import tile      as tl
 def tensordot(L, R, axis_keys=([0],[0])):
   sum_axis_keys_L, sum_axis_keys_R = axis_keys
   ncontracted = len(sum_axis_keys_L)
-  print L._shape
-  print R._shape
   L = L.transpose(sum_axis_keys_L + [axis_key for axis_key in L.iter_axis_keys() if not axis_key in sum_axis_keys_L])
   R = R.transpose(sum_axis_keys_R + [axis_key for axis_key in R.iter_axis_keys() if not axis_key in sum_axis_keys_R])
-  print sum_axis_keys_L + [axis_key for axis_key in L.iter_axis_keys() if not axis_key in sum_axis_keys_L]
-  print sum_axis_keys_R + [axis_key for axis_key in R.iter_axis_keys() if not axis_key in sum_axis_keys_R]
-  print L._shape
-  print R._shape
   sum_axes = L.get_axis(slice(None,ncontracted))
   row_axes = L.get_axis(slice(ncontracted,None))
   col_axes = R.get_axis(slice(ncontracted,None))
@@ -72,12 +66,10 @@ class TiledTensor(object):
 
   def transpose(self, axis_keys = None):
     if axis_keys is None: axis_keys = tuple(reversed(range(self._ndim)))
-    tiles = self._tiles.transpose(axis_keys)
+    tiles = self._tiles.transpose(axis_keys).copy()
     axes  = tuple(self._axes[axis_key] for axis_key in axis_keys)
     for tile_key in multi_axis_iter(axes):
-      print '  ', tiles[tile_key]._shape, '->',
       tiles[tile_key] = tiles[tile_key].transpose(axis_keys)
-      print tiles[tile_key]._shape
     return TiledTensor(axes, tiles)
 
   def __pos__ (self       ): return TiledTensor(self._axes, +self._tiles)

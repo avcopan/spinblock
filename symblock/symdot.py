@@ -49,7 +49,6 @@ class SymmetryHelper:
     return reduce(lambda i, j: self._irrep_lookup[i] ^ self._irrep_lookup[j], element_list)
 
 def water_mp2_script(scfwfn, mints):
-  sh = SymmetryHelper(BINARY_IRREPS["C2v"], [0, 1, 2, 3])
   nirrep = scfwfn.nirrep()
   nsopi  = tuple(scfwfn.nsopi()[h] for h in range(nirrep))
   nso    = scfwfn.nso()
@@ -58,25 +57,33 @@ def water_mp2_script(scfwfn, mints):
   c1_axis  = ax.PartitionedAxis(nso)
   c2v_axis = ax.PartitionedAxis(nsopi)
 
-  symmetrizer = mints.petite_list().sotoao()
 
   import tensor as tn
   U = tn.TiledTensor((c2v_axis, c1_axis))
+  symmetrizer = mints.petite_list().sotoao()
   for h in range(nirrep):
+    offset = c2v_axis.get_partition_start(h)
     for i in range(symmetrizer.rows(h)):
       for j in range(symmetrizer.cols(h)):
-        offset = c2v_axis.get_partition_start(h)
         U[i+offset, j] = symmetrizer.get(h, i, j)
+  C = tn.TiledTensor((c2v_axis, c2v_axis))
+  mo_coeffs = scfwfn.Ca()
+  for h in range(nirrep):
+    offset = c2v_axis.get_partition_start(h)
+    for i in range(mo_coeffs.rows(h)):
+      for j in range(mo_coeffs.cols(h)):
+        C[i+offset, j+offset] = mo_coeffs.get(h, i, j)
 
   import numpy as np
   c2v_g = tn.TiledTensor((c2v_axis, c2v_axis, c2v_axis, c2v_axis))
   c1_g  = tn.TiledTensor(( c1_axis,  c1_axis,  c1_axis,  c1_axis))
   c1_g[0:7,0:7,0:7,0:7] = np.array(mints.ao_eri())
   g1    = tn.tensordot(U, c1_g, axis_keys=([1],[3]))
-  print g1.get_axis(0)
-  print g1.get_axis(1)
-  print g1.get_axis(2)
-  print g1.get_axis(3)
   g2    = tn.tensordot(U,   g1, axis_keys=([1],[3]))
   g1    = tn.tensordot(U,   g2, axis_keys=([1],[3]))
   c2v_g = tn.tensordot(U,   g1, axis_keys=([1],[3]))
+
+  import numpy.linalg as la
+  sh = SymmetryHelper(BINARY_IRREPS["C2v"], [0, 1, 2, 3])
+
+    

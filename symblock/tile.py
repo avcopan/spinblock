@@ -6,10 +6,7 @@ def tensordot(L, R, axis_keys=([0],[0])):
   shape = [axis_dim for axis_key, axis_dim in enumerate(L.get_shape()) if not axis_key in sum_axis_keys_L] + \
           [axis_dim for axis_key, axis_dim in enumerate(R.get_shape()) if not axis_key in sum_axis_keys_R]
   if L.is_empty() or R.is_empty(): return Tile(shape, None)
-  else:
-    print '  ', L._shape, L._array.shape
-    print '  ', R._shape, R._array.shape
-    return Tile(shape, np.tensordot(L._array, R._array, axes=axis_keys))
+  else: return Tile(shape, np.tensordot(L._array, R._array, axes=axis_keys))
 
 class Tile(object):
 
