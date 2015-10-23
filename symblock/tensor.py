@@ -51,6 +51,7 @@ class TiledTensor(object):
   def get_tile       (self, tile_key  ): return self._tiles[tile_key]
   def get_tile_container_shape(self   ): return multi_axis_getattr("get_npartitions"    , self._axes          )
   def get_subkey     (self, index     ): return multi_axis_getattr("get_subkey"         , self._axes, index   )
+
   def get_tile_key   (self, index     ): return multi_axis_getattr("get_partition_key"  , self._axes, index   )
   def get_tile_shape (self, tile_key  ): return multi_axis_getattr("get_partition_size" , self._axes, tile_key)
   def get_tile_offset(self, tile_key  ): return multi_axis_getattr("get_partition_start", self._axes, tile_key)
