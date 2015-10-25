@@ -3,6 +3,7 @@ import numpy as np
 class Tile(object):
 
   def __init__(self, shape, array = None):
+    if isinstance(shape, int): shape = (shape,)
     self.ndim  = len  (shape)
     self.shape = tuple(shape)
     if not array is None:
