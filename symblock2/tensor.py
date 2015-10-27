@@ -1,37 +1,48 @@
-import axis  as ax
-import numpy as np
+import numpy     as np
+import multiaxis as ma
+# avoiding Tile objects altogether now -- just realized that it's probably not necessary
 
-class Container(object):
+class Array(object):
 
   def __init__(self, axes):
-    self.ma    = ax.MultiAxis(axes)
-    self.array = np.empty(self.ma.shape, dtype=self.ma.dtype)
-    for elem_keytup, elem_init_args in self.ma.iter_elem_init_args():
-      self.array[elem_keytup] = self.ma.dtype(elem_init_args)
+    if not hasattr(axes, "__getitem__"): axes = (axes,)
+    self.ma    = np.prod(axes)
+    self.shape = self.ma.nelemtup
+    self.dtype = self.ma.elem_dtype
+    self.array = np.empty(self.shape, self.dtype)
+    for elem_keytup in self.ma.iter_elem_keytups():
+      init_args = tuple(elem_init_args[elem_key] for elem_init_args, elem_key in zip(self.ma.elem_init_argstup, elem_keytup))
+      self.array[elem_keytup] = self.dtype( init_args )
 
-  def __repr__(self): return self.array.__str__()
+  def __repr__(self):
+    import itertools as it
+    rows  , cols   = list(it.product(*self.ma.elem_keystup[:-1]))          , list(it.product(*self.ma.elem_keystup[-1:]))
+    rowlbs, collbs = [str(row).replace(',','').rstrip(")") for row in rows], [str(keytup).replace(',','').lstrip("(") for keytup in cols]
+    lbwd  , colwd  = max(len(rowlb) for rowlb in rowlbs)                   , max(len(collb) for collb in collbs)
+    fmt = lambda lb, it: ("  {:{wd1}s}"+" {:{wd2}s}"*len(cols)+"\n").format(lb, *it, wd1=lbwd, wd2=colwd)
+    ret = fmt('', collbs)
+    for lb, r in zip(rowlbs, rows): ret += fmt(lb, ('-' if self.array[r+c] is None else '#' for c in cols))
+    return "Array {{\n{:s}dtype = {:s}}}".format(ret, self.dtype.__name__)
 
-  def __getitem__(self, *args): return self.array.__getitem__(*args)
-
-  def __setitem__(self, *args): self.array.__setitem__(*args)
+  def __getitem__(self, *args): return self.array[args[0]]
+  def __setitem__(self, *args):        self.array[args[0]] = args[1]
 
 if __name__ == "__main__":
-  a1 = ax.Axis((1,2), np.ndarray)
-  c1 = Container((a1, a1))
+  import axis as ax
+  a  = ax.Axis(7, np.ndarray)
+  ia = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
+  sa = ax.SpinAxis("U", (ia, ia), Array)
 
-  for i in range(2):
-    for j in range(2):
-      c1[i,j].fill(0)
+  O = Array(ia)
+  A = Array(( a,  a))
+  B = Array(( a, ia))
+  C = Array((ia, ia))
+  D = Array((sa, sa))
 
-  print c1
+  print O
+  print A
+  print B
+  print C
+  print D
 
-  a2 = ax.Axis((a1, a1), Container)
-  c2 = Container((a2, a2))
-
-  for i in range(2):
-    for j in range(2):
-      for k in range(2):
-        for l in range(2):
-          c2[i,j][k,l].fill(2*i + j)
-
-  print c2
+  print Array((ia, ia, ia))
