@@ -24,4 +24,4 @@ if __name__ == "__main__":
   irreps = (1,1,1,3)
   prod_irrep = reduce(lambda a, b: a^b, irreps)
   print prod_irrep
-  print XOR(prod_irrep^1)(irreps)
+  print XOR(prod_irrep)(irreps)
