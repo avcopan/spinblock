@@ -10,18 +10,20 @@ class Array(object):
       except: raise ValueError("Array must be initialized with MultiAxis or a tuple of Axis objects")
     self.multiaxis = multiaxis
     self.array     = array
+    self.shape     = multiaxis.shape
+    self.dtype     = multiaxis.dtype
     if array is None:
-      self.array = np.empty(multiaxis.shape, multiaxis.dtype)
-      for keytup in multiaxis.iter_keytups():
-        self.array[keytup] = multiaxis.dtype(tuple(init_arg[key] for init_arg, key in zip(multiaxis.init_args, keytup)))
-        if hasattr(multiaxis.dtype, "fill"): self.array[keytup].fill(0)
+      self.array = np.empty(self.shape, self.dtype)
+      for keytup in multiaxis.iter_array_keytups():
+        self.array[keytup] = self.dtype(tuple(init_arg[key] for init_arg, key in zip(multiaxis.init_args, keytup)))
+        if hasattr(self.dtype, "fill"): self.array[keytup].fill(0)
     elif not isinstance(array, np.ndarray) and array.shape == multiaxis.shape and array.dtype == multiaxis.dtype:
       raise ValueError("Array must be initialized with ndarray object of shape {:s} and dtype {:s}".format(str(multiaxis.shape), type(multiaxis.dtype).__name__))
 
   def __getitem__(self, *args): return self.array[args[0]]
   def __setitem__(self, *args):        self.array[args[0]] = args[1]
 
-  def __iter__(self): return (self.array[keytup] for keytup in self.multiaxis.iter_keytups())
+  def __iter__(self): return (self.array[keytup] for keytup in self.multiaxis.iter_array_keytups())
   def __str__ (self): return pt.Array2str(self)
   def __pos__ (self): return self
   def __neg__ (self): return Array(self.multiaxis, self.transform(lambda arr, kt: -arr[kt]))
@@ -48,7 +50,7 @@ class Array(object):
 
   def transform(self, transformer):
     array = np.empty(self.multiaxis.shape, self.multiaxis.dtype)
-    for keytup in self.multiaxis.iter_keytups(): array[keytup] = transformer(self.array, keytup)
+    for keytup in self.multiaxis.iter_array_keytups(): array[keytup] = transformer(self.array, keytup)
     return array
 
   def transpose(self, axis_keys = None):
@@ -95,60 +97,15 @@ def test1():
 
   C = Array(col_axes + row_axes)
 
-  for col in np.prod(col_axes).iter_keytups():
-    for row in np.prod(row_axes).iter_keytups():
-      for trc in MultiAxis(trc_axes).iter_keytups():
+  for col in np.prod(col_axes).iter_array_keytups():
+    for row in np.prod(row_axes).iter_array_keytups():
+      for trc in MultiAxis(trc_axes).iter_array_keytups():
         if not (0 in A[col+trc].shape or 0 in B[trc+row].shape):
           C[col+row] += np.tensordot(A[col+trc], B[trc+row], axes=((2,3),(0,1)))
 
   print np.linalg.norm(C[0,0,0,0] - c)
 
-def test2():
-  import axis as ax
-  import numpy as np
-  ia = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
-  A = Array(ia*ia*ia*ia)
-  B = Array(ia*ia*ia*ia)
-  C = Array(ia*ia*ia*ia)
-
-  from symmetry import XOR
-  for col in ax.MultiAxis((ia,ia)).iter_keytups():
-    for row in np.prod(ia*ia).iter_keytups(XOR(col)):
-      A[col+row] = np.random.rand(*A[col+row].shape)
-      B[col+row] = np.random.rand(*B[col+row].shape)
-
-  for col in ax.MultiAxis((ia,ia)).iter_keytups():
-    for row in np.prod(ia*ia).iter_keytups(XOR(col)):
-      for trc in np.prod(ia*ia).iter_keytups(XOR(col)):
-        if not (0 in A[col+trc].shape or 0 in B[trc+row].shape):
-          C[col+row] += np.tensordot(A[col+trc], B[trc+row], axes=((2,3),(0,1)))
-      print C[col+row]
-
-def test3():
-  import axis as ax
-  import numpy as np
-  ia = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
-  A = Array(ia*ia)
-  B = Array(ia*ia)
-  C = Array(ia*ia)
-  Cref = Array(ia*ia)
-
-  from symmetry import XOR
-  for col in ax.MultiAxis(ia).iter_keytups():
-    for row in ax.IrrepMultiAxis(ia).iter_keytups(XOR(col)):
-      a = np.random.rand(*A[col+row].shape)
-      b = np.random.rand(*B[col+row].shape)
-      A[col+row] = a
-      B[col+row] = b
-      Cref[col+row] = np.dot(a, b)
-
-'''
-  for col in MultiAxis(ia).iter_keytups():
-    for row in IrrepMultiAxis(ia).iter_keytups(XOR(col)):
-      for trc in IrrepMultiAxis(ia).iter_keytups(XOR(col)):
-        if not (0 in A[col+trc]
-'''
 
 
 if __name__ == "__main__":
-  test3()
+  test1()

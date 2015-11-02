@@ -22,7 +22,9 @@ class MultiAxis(object):
     if axis_keys is None: axis_keys = tuple(reversed(range(self.ndim)))
     return np.prod([self.axes[axis_key] for axis_key in axis_keys])
 
-  def iter_keytups(self): return it.product(*self.keys)
+  def iter_array_keytups(self):           return it.product(*self.keys)
+  def iter_keytups(self):                 return it.product(*self.keys)
+  def iter_keytups_against(self, keytup): return it.product(*self.keys)
 
   def select_common_attribute(self, attr_name):
     attrs = set(getattr(axis, attr_name) for axis in self.axes)
@@ -42,7 +44,11 @@ class IrrepMultiAxis(MultiAxis):
 
   def __str__(self): return pt.IrrepMultiAxis2str(self)
 
-  def iter_keytups(self, irrep=0): return it.ifilter(lambda keytup: XOR(keytup) == irrep, it.product(*self.keys))
+  def iter_array_keytups(self): return it.ifilter(lambda keytup: XOR(keytup) == 0, it.product(*self.keys))
+  def iter_keytups(self):       return it.product(*self.keys)
+  def iter_keytups_against(self, keytup):
+    irrep = XOR(col_keytup)
+    return it.ifilter(lambda keytup: XOR(keytup) == irrep, it.product(*self.keys))
 
 
 class SpinMultiAxis(MultiAxis):
@@ -56,7 +62,11 @@ class SpinMultiAxis(MultiAxis):
 
   def __str__(self): return pt.SpinMultiAxis2str(self)
 
-  def iter_keytups(self, spin=0): return it.ifilter(lambda keytup: XOR(keytup) == spin, it.product(*self.keys))
+  def iter_array_keytups(self): return it.ifilter(lambda keytup: XOR(keytup) == 0, it.product(*self.keys))
+  def iter_keytups(self):       return it.product(*self.keys)
+  def iter_keytups_against(self, keytup):
+    spin = XOR(col_keytup)
+    return it.ifilter(lambda keytup: XOR(keytup) == spin, it.product(*self.keys))
 
 
 if __name__ == "__main__":
