@@ -29,7 +29,7 @@ class MultiAxis(object):
     try:    attr, = attrs; return attr
     except: raise ValueError("Can't make MultiAxis from axes with mismatched {:s} values {:s}".format(attr_name, tuple(attrs)))
 
-from symmetry import XOR
+from symmetry import XOR, PG_DIM
 
 class IrrepMultiAxis(MultiAxis):
 
@@ -42,7 +42,8 @@ class IrrepMultiAxis(MultiAxis):
 
   def __str__(self): return pt.IrrepMultiAxis2str(self)
 
-  def iter_keytups(self): return it.ifilter(XOR(0), it.product(*self.keys))
+  def iter_keytups(self, irrep=0): return it.ifilter(lambda keytup: XOR(keytup) == irrep, it.product(*self.keys))
+
 
 class SpinMultiAxis(MultiAxis):
 
@@ -55,8 +56,7 @@ class SpinMultiAxis(MultiAxis):
 
   def __str__(self): return pt.SpinMultiAxis2str(self)
 
-  def iter_keytups(self): return it.ifilter(XOR(0), it.product(*self.keys))
-
+  def iter_keytups(self, spin=0): return it.ifilter(lambda keytup: XOR(keytup) == spin, it.product(*self.keys))
 
 
 if __name__ == "__main__":
@@ -70,3 +70,6 @@ if __name__ == "__main__":
   print b*b*b
   print c*c*c*c
   print a*b*c
+
+  print type(a*a*a)
+  print type(a*a*a) == type(a*a*a)

@@ -55,39 +55,100 @@ class Array(object):
     return Array(self.multiaxis.transpose(axis_keys), self.transform(lambda arr, kt: arr[kt].transpose(axis_keys)).transpose(axis_keys))
   T = property(transpose, None)
 
+  def dot(self, other, axis_keys = None):
+    if not isinstance(other, Array):
+      raise TypeError ("dot (matrix muliplication) of Array with {:s} is undefined.".format(type(other).__name__))
+    col_multiaxis = np.prod(self.multiaxis.axes[:-1])
+    row_multiaxis = np.prod(other.multiaxis.axes[:-2] + other.multiaxis.axes[-2:][1:])
+    dot_axis = other.multiaxis.axes[-1] if other.multiaxis.ndim is 1 else other.multiaxis.axes[-2]
+    if not self.multiaxis.axes[-1] == dot_axis:
+      raise ValueError("dot (matrix multiplication): cannot dot {:s} against {:s}.".format(str(self.multiaxis.axes[-1]), str(dot_axis)))
+
+    
+
+
+def test1():
+  import axis as ax
+  import numpy as np
+  a = ax.Axis((7,), np.ndarray)
+  ia = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
+  A = Array(a*a*ia*ia)
+  B = Array(ia*ia*a*a)
+
+  a = np.random.rand(7,7,7,7)
+  b = np.random.rand(7,7,7,7)
+  c = np.tensordot(a, b, axes=((2,3),(0,1)))
+
+  it_a  = zip(range(1),(slice(7),),(slice(7),))
+  it_ia = zip(range(4),(slice(4),slice(0),slice(1),slice(2)),(slice(0,4),slice(4,4),slice(4,5),slice(5,7)))
+
+  for h1, i1, j1 in it_a:
+    for h2, i2, j2 in it_a:
+      for h3, i3, j3 in it_ia:
+        for h4, i4, j4 in it_ia:
+          A[h1,h2,h3,h4][i1,i2,i3,i4] = a[j1,j2,j3,j4]
+          B[h3,h4,h1,h2][i3,i4,i1,i2] = b[j3,j4,j1,j2]
+
+  col_axes = A.multiaxis.axes[:2]
+  trc_axes = A.multiaxis.axes[2:]
+  row_axes = B.multiaxis.axes[2:]
+
+  C = Array(col_axes + row_axes)
+
+  for col in np.prod(col_axes).iter_keytups():
+    for row in np.prod(row_axes).iter_keytups():
+      for trc in MultiAxis(trc_axes).iter_keytups():
+        if not (0 in A[col+trc].shape or 0 in B[trc+row].shape):
+          C[col+row] += np.tensordot(A[col+trc], B[trc+row], axes=((2,3),(0,1)))
+
+  print np.linalg.norm(C[0,0,0,0] - c)
+
+def test2():
+  import axis as ax
+  import numpy as np
+  ia = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
+  A = Array(ia*ia*ia*ia)
+  B = Array(ia*ia*ia*ia)
+  C = Array(ia*ia*ia*ia)
+
+  from symmetry import XOR
+  for col in ax.MultiAxis((ia,ia)).iter_keytups():
+    for row in np.prod(ia*ia).iter_keytups(XOR(col)):
+      A[col+row] = np.random.rand(*A[col+row].shape)
+      B[col+row] = np.random.rand(*B[col+row].shape)
+
+  for col in ax.MultiAxis((ia,ia)).iter_keytups():
+    for row in np.prod(ia*ia).iter_keytups(XOR(col)):
+      for trc in np.prod(ia*ia).iter_keytups(XOR(col)):
+        if not (0 in A[col+trc].shape or 0 in B[trc+row].shape):
+          C[col+row] += np.tensordot(A[col+trc], B[trc+row], axes=((2,3),(0,1)))
+      print C[col+row]
+
+def test3():
+  import axis as ax
+  import numpy as np
+  ia = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
+  A = Array(ia*ia)
+  B = Array(ia*ia)
+  C = Array(ia*ia)
+  Cref = Array(ia*ia)
+
+  from symmetry import XOR
+  for col in ax.MultiAxis(ia).iter_keytups():
+    for row in ax.IrrepMultiAxis(ia).iter_keytups(XOR(col)):
+      a = np.random.rand(*A[col+row].shape)
+      b = np.random.rand(*B[col+row].shape)
+      A[col+row] = a
+      B[col+row] = b
+      Cref[col+row] = np.dot(a, b)
+
+'''
+  for col in MultiAxis(ia).iter_keytups():
+    for row in IrrepMultiAxis(ia).iter_keytups(XOR(col)):
+      for trc in IrrepMultiAxis(ia).iter_keytups(XOR(col)):
+        if not (0 in A[col+trc]
+'''
 
 
 if __name__ == "__main__":
-  import axis as ax
-  ia = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
-  print Array(ia*ia*ia)
-
-  a1 = ax.Axis(7, np.ndarray)
-  a2 = ax.Axis((4,0,1,2), np.ndarray)
-  A = Array((a1, a2))
-  print A
-  print A[0,0].shape
-  B = A.T
-  print B
-  print B[0,0].shape
-  print A
-  print A[0,0].shape
-
-  C = 1 + A
-
-  for blk in C:
-    print blk
-
-  D = C + C
-  for blk in D:
-    print blk
-
-  E = -D
-
-  for blk in E:
-    print blk
-
-  F = 1 / E
-
-  for blk in F:
-    print blk
+  test3()
