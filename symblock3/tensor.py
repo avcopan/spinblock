@@ -10,6 +10,7 @@ class Array(object):
       except: raise ValueError("Array must be initialized with MultiAxis or a tuple of Axis objects")
     self.multiaxis = multiaxis
     self.array     = array
+    self.ndim      = multiaxis.ndim
     self.shape     = multiaxis.shape
     self.dtype     = multiaxis.dtype
     if array is None:
@@ -25,6 +26,7 @@ class Array(object):
 
   def __iter__(self): return (self.array[keytup] for keytup in self.multiaxis.iter_array_keytups())
   def __str__ (self): return pt.Array2str(self)
+  def __repr__(self): return pt.Array2str(self)
   def __pos__ (self): return self
   def __neg__ (self): return Array(self.multiaxis, self.transform(lambda arr, kt: -arr[kt]))
 

@@ -5,7 +5,9 @@ import printer   as pt
 class MultiAxis(object):
 
   def __init__(self, axes):
-    if not hasattr(axes, "__getitem__"): axes = (axes,)
+    if not hasattr(axes, "__getitem__"):
+      try:    axes = tuple(axes)
+      except: axes = (axes,)
     self.axes      = axes
     self.ndim      = len(axes)
     self.dtype     = self.select_common_attribute("elem_dtype")
@@ -16,7 +18,8 @@ class MultiAxis(object):
   def __eq__(self, other): return self.axes == other.axes
   def __ne__(self, other): return self.axes != other.axes
 
-  def __str__(self): return pt.MultiAxis2str(self)
+  def __str__ (self): return pt.MultiAxis2str(self)
+  def __repr__(self): return pt.MultiAxis2str(self)
 
   def transpose(self, axis_keys = None):
     if axis_keys is None: axis_keys = tuple(reversed(range(self.ndim)))
@@ -42,7 +45,8 @@ class IrrepMultiAxis(MultiAxis):
   def __eq__(self, other): return self.axes == other.axes
   def __ne__(self, other): return self.axes != other.axes
 
-  def __str__(self): return pt.IrrepMultiAxis2str(self)
+  def __str__ (self): return pt.IrrepMultiAxis2str(self)
+  def __repr__(self): return pt.IrrepMultiAxis2str(self)
 
   def iter_array_keytups(self): return it.ifilter(lambda keytup: XOR(keytup) == 0, it.product(*self.keys))
   def iter_keytups(self):       return it.product(*self.keys)
@@ -60,7 +64,8 @@ class SpinMultiAxis(MultiAxis):
   def __eq__(self, other): return self.axes == other.axes
   def __ne__(self, other): return self.axes != other.axes
 
-  def __str__(self): return pt.SpinMultiAxis2str(self)
+  def __str__ (self): return pt.SpinMultiAxis2str(self)
+  def __repr__(self): return pt.SpinMultiAxis2str(self)
 
   def iter_array_keytups(self): return it.ifilter(lambda keytup: XOR(keytup) == 0, it.product(*self.keys))
   def iter_keytups(self):       return it.product(*self.keys)
@@ -83,3 +88,4 @@ if __name__ == "__main__":
 
   print type(a*a*a)
   print type(a*a*a) == type(a*a*a)
+

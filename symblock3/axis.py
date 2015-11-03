@@ -17,7 +17,8 @@ class Axis(MultiAxis):
   def __mul__ (self, other): return self.prod(other, False)
   def __rmul__(self, other): return self.prod(other, True )
 
-  def __str__(self): return pt.Axis2str(self)
+  def __str__ (self): return pt.Axis2str(self)
+  def __repr__(self): return pt.Axis2str(self)
 
   def prod(self, other, swap = False):
     self, other = (self,), (other,) if not hasattr(other, "axes") else other.axes
@@ -40,7 +41,8 @@ class IrrepAxis(Axis, IrrepMultiAxis):
   def __mul__ (self, other): return self.prod(other, False)
   def __rmul__(self, other): return self.prod(other, True )
 
-  def __str__(self): return pt.IrrepAxis2str(self)
+  def __str__ (self): return pt.IrrepAxis2str(self)
+  def __repr__(self): return pt.IrrepAxis2str(self)
 
   def prod(self, other, swap = False):
     self, other = (self,), (other,) if not hasattr(other, "axes") else other.axes
@@ -61,7 +63,8 @@ class SpinAxis(Axis, SpinMultiAxis):
   def __mul__ (self, other): return self.prod(other, False)
   def __rmul__(self, other): return self.prod(other, True )
 
-  def __str__(self): return pt.SpinAxis2str(self)
+  def __str__ (self): return pt.SpinAxis2str(self)
+  def __repr__(self): return pt.SpinAxis2str(self)
 
   def prod(self, other, swap = False):
     self, other = (self,), (other,) if not hasattr(other, "axes") else other.axes
