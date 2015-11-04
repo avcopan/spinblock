@@ -67,9 +67,7 @@ class SpinMultiAxis(MultiAxis):
 
   def iter_array_keytups(self): return it.ifilter(lambda keytup: XOR(keytup) == 0, it.product(*self.keys))
   def iter_keytups(self):       return it.product(*self.keys)
-  def iter_keytups_against(self, keytup):
-    spin = XOR(col_keytup)
-    return it.ifilter(lambda keytup: XOR(keytup) == spin, it.product(*self.keys))
+  def iter_keytups_against(self, keytup): spin = XOR(keytup); return it.ifilter(lambda keytup: XOR(keytup) == spin, it.product(*self.keys))
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 import numpy     as np
 import printer   as pt
 from multiaxis import MultiAxis
+from contract  import tensordot
 
 class Array(object):
 
@@ -21,7 +22,7 @@ class Array(object):
     elif not isinstance(array, np.ndarray) and array.shape == multiaxis.shape and array.dtype == multiaxis.dtype:
       raise ValueError("Array must be initialized with ndarray object of shape {:s} and dtype {:s}".format(str(multiaxis.shape), type(multiaxis.dtype).__name__))
 
-  def has_data(self, keytup): return not self.array[keytup] is None and not 0 in self.array[keytup].shape
+  def has_data_at(self, keytup): return not self.array[keytup] is None and not 0 in self.array[keytup].shape
 
   def __getitem__(self, *args): return self.array[args[0]]
   def __setitem__(self, *args):        self.array[args[0]] = args[1]
@@ -32,27 +33,30 @@ class Array(object):
   def __pos__ (self): return self
   def __neg__ (self): return Array(self.multiaxis, self.transform(lambda arr, kt: -arr[kt]))
 
-  def __add__ (self, other): return self.elementwise_operation(other, np.ndarray.__add__ )
-  def __sub__ (self, other): return self.elementwise_operation(other, np.ndarray.__sub__ )
-  def __mul__ (self, other): return self.elementwise_operation(other, np.ndarray.__mul__ )
-  def __div__ (self, other): return self.elementwise_operation(other, np.ndarray.__div__ )
-  def __radd__(self, other): return self.elementwise_operation(other, np.ndarray.__radd__)
-  def __rsub__(self, other): return self.elementwise_operation(other, np.ndarray.__rsub__)
-  def __rmul__(self, other): return self.elementwise_operation(other, np.ndarray.__rmul__)
-  def __rdiv__(self, other): return self.elementwise_operation(other, np.ndarray.__rdiv__)
+  def __add__ (self, other): return self.elementwise_operation(other, "__add__" )
+  def __sub__ (self, other): return self.elementwise_operation(other, "__sub__" )
+  def __mul__ (self, other): return self.elementwise_operation(other, "__mul__" )
+  def __div__ (self, other): return self.elementwise_operation(other, "__div__" )
+  def __radd__(self, other): return self.elementwise_operation(other, "__radd__")
+  def __rsub__(self, other): return self.elementwise_operation(other, "__rsub__")
+  def __rmul__(self, other): return self.elementwise_operation(other, "__rmul__")
+  def __rdiv__(self, other): return self.elementwise_operation(other, "__rdiv__")
+  def __mod__ (self, other): return tensordot(self, other)
+  def __rmod__(self, other): return tensordot(other, self)
 
   def elementwise_operation(self, other, operation):
     if isinstance(other, Array):
       if other.multiaxis == self.multiaxis:
-        array = self.transform(lambda arr, kt: operation(arr[kt], other.array[kt]))
-      else: raise TypeError("Cannot {:s} Arrays with inconsistent axes\n{:s}\nand\n{:s}".format(operation.__name__, str(self.multiaxis), str(other.multiaxis)))
+        array = self.transform(lambda arr, kt: getattr(arr[kt], operation)(other.array[kt]))
+      else: raise TypeError("Cannot {:s} Arrays with inconsistent axes\n{:s}\nand\n{:s}".format(operation, str(self.multiaxis), str(other.multiaxis)))
     else:
       try:
-        array = self.transform(lambda arr, kt: operation(arr[kt], other))
-      except: raise ValueError("Cannot {:s} Array and {:s}".format(operation.__name__, type(other).__name__))
+        array = self.transform(lambda arr, kt: getattr(arr[kt], operation)(other.array[kt]))
+      except: raise ValueError("Cannot {:s} Array and {:s}".format(operation, type(other).__name__))
     return Array(self.multiaxis, array)
 
   def transform(self, transformer):
+    #for keytup in self.multiaxis.iter_array_keytups(): print self.array[keytup]
     array = np.empty(self.multiaxis.shape, self.multiaxis.dtype)
     for keytup in self.multiaxis.iter_array_keytups(): array[keytup] = transformer(self.array, keytup)
     return array
