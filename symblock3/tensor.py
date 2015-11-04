@@ -21,6 +21,8 @@ class Array(object):
     elif not isinstance(array, np.ndarray) and array.shape == multiaxis.shape and array.dtype == multiaxis.dtype:
       raise ValueError("Array must be initialized with ndarray object of shape {:s} and dtype {:s}".format(str(multiaxis.shape), type(multiaxis.dtype).__name__))
 
+  def has_data(self, keytup): return not self.array[keytup] is None and not 0 in self.array[keytup].shape
+
   def __getitem__(self, *args): return self.array[args[0]]
   def __setitem__(self, *args):        self.array[args[0]] = args[1]
 

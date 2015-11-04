@@ -24,7 +24,7 @@ def tensordot(l, r, axis_keys=((0,),(0,))):
     for col in col_multiaxis.iter_keytups():
       for row in row_multiaxis.iter_keytups_against(col):
         for trc in trc_multiaxis.iter_keytups_against(col):
-          if not (0 in L[trc + col].shape or 0 in R[trc + row].shape):
+          if T.has_data(col+row) and L.has_data(trc+col) and R.has_data(trc+row):
             T[col + row] += tensordot(L[trc + col], R[trc + row], transposed_axis_keys)
     return T
   else:
@@ -87,6 +87,35 @@ def test2():
   for blk in S:
     print blk
 
+def test3():
+  import axis as ax
+  ia = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
+  a  = ax.Axis(7, np.ndarray)
+  L = tn.Array(ia*a)
+  R = tn.Array(a*ia)
+  Tref = tn.Array(ia*ia)
+
+  l = np.random.rand(7,7)
+  r = np.random.rand(7,7)
+  t = np.dot(l, r)
+
+  it = zip(range(1), (slice(7),), (slice(7),))
+  iit = zip(range(4),(slice(4),slice(0),slice(1),slice(2)),(slice(0,4),slice(4,4),slice(4,5),slice(5,7)))
+
+  for h1, i1, j1 in iit:
+    Tref[h1,h1][i1,i1] = t[j1,j1]
+    for h2, i2, j2 in it:
+      L[h1,h2][i1,i2] = l[j1,j2]
+      R[h2,h1][i2,i1] = r[j2,j1]
+
+  T = tensordot(L, R, axis_keys=((1,),(0,)))
+  print Tref
+  print T
+
+  E = T - Tref
+  for blk in E:
+    print blk
+
 
 if __name__ == "__main__":
-  test2()
+  test3()
