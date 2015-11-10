@@ -12,7 +12,7 @@ set df_scf_guess false
 energy('scf')
 
 
-from h2o import water_mp2_script
+from h2o_alt import water_mp2_script
 
 scfwfn = psi4.wavefunction()
 mints  = psi4.MintsHelper()

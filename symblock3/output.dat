@@ -16,9 +16,9 @@
     -----------------------------------------------------------------------
 
 
-    Psi4 started on: Tue Nov 10 12:30:32 2015
+    Psi4 started on: Tue Nov 10 14:12:24 2015
 
-    Process ID:   3160
+    Process ID:   3549
     PSI4DATADIR: /home/avcopan/Documents/code/github/psi4/lib
     Memory level set to 256.000 MB
 
@@ -39,7 +39,7 @@ set df_scf_guess false
 energy('scf')
 
 
-from h2o import water_mp2_script
+from h2o_alt import water_mp2_script
 
 scfwfn = psi4.wavefunction()
 mints  = psi4.MintsHelper()
@@ -52,7 +52,7 @@ energy('mp2')
 --------------------------------------------------------------------------
 
 *** tstart() called on knut
-*** at Tue Nov 10 12:30:32 2015
+*** at Tue Nov 10 14:12:24 2015
 
 
          ---------------------------------------------------------
@@ -254,18 +254,18 @@ Properties computed using the SCF density matrix
   LUNO+1 :    2 B2 0.0011653
 
 
-*** tstop() called on knut at Tue Nov 10 12:30:33 2015
+*** tstop() called on knut at Tue Nov 10 14:12:24 2015
 Module time:
 	user time   =       0.28 seconds =       0.00 minutes
-	system time =       0.44 seconds =       0.01 minutes
-	total time  =          1 seconds =       0.02 minutes
+	system time =       0.41 seconds =       0.01 minutes
+	total time  =          0 seconds =       0.00 minutes
 Total time:
 	user time   =       0.28 seconds =       0.00 minutes
-	system time =       0.44 seconds =       0.01 minutes
-	total time  =          1 seconds =       0.02 minutes
+	system time =       0.41 seconds =       0.01 minutes
+	total time  =          0 seconds =       0.00 minutes
 
 *** tstart() called on knut
-*** at Tue Nov 10 12:30:33 2015
+*** at Tue Nov 10 14:12:25 2015
 
 
          ---------------------------------------------------------
@@ -469,123 +469,18 @@ Properties computed using the SCF density matrix
   LUNO+1 :    2 B2 0.0011653
 
 
-*** tstop() called on knut at Tue Nov 10 12:30:33 2015
+*** tstop() called on knut at Tue Nov 10 14:12:25 2015
 Module time:
-	user time   =       0.26 seconds =       0.00 minutes
-	system time =       0.42 seconds =       0.01 minutes
+	user time   =       0.27 seconds =       0.00 minutes
+	system time =       0.40 seconds =       0.01 minutes
 	total time  =          0 seconds =       0.00 minutes
 Total time:
-	user time   =       0.98 seconds =       0.02 minutes
-	system time =       1.86 seconds =       0.03 minutes
+	user time   =       1.27 seconds =       0.02 minutes
+	system time =       2.02 seconds =       0.03 minutes
 	total time  =          1 seconds =       0.02 minutes
 
 *** tstart() called on knut
-*** at Tue Nov 10 12:30:33 2015
-
-
-
-  Options:
-  ----------------------------------------------------------------------------
-  ACTIVE                      => [  ]             
-  BENCH                       => 0                
-  CACHELEVEL                  => 2                
-  CCL_ENERGY                  => FALSE            
-  CC_DIIS_MAX_VECS            => 6                
-  CC_DIIS_MIN_VECS            => 2                
-  CC_MAXITER                  => 50               
-  CC_TYPE                     => CONVENTIONAL     
-  CEPA_OS_SCALE               => 1.27             
-  CEPA_SOS_SCALE              => 1.3              
-  CEPA_SS_SCALE               => 1.13             
-  CEPA_TYPE                   => CEPA0            
-  CUBEPROP_BASIS_FUNCTIONS    => [  ]             
-  CUBEPROP_FILEPATH           => .                
-  CUBEPROP_ORBITALS           => [  ]             
-  CUBEPROP_TASKS              => [  ]             
-  CUBIC_BASIS_TOLERANCE       => 1e-12            
-  CUBIC_BLOCK_MAX_POINTS      => 1000             
-  CUBIC_GRID_OVERAGE          => [  ]             
-  CUBIC_GRID_SPACING          => [  ]             
-  CUTOFF                      => 14               
-  DEBUG                       => 0                
-  DERTYPE                     => NONE             
-  DF_BASIS_CC                 => (empty)          
-  DIE_IF_NOT_CONVERGED        => TRUE             
-  DKH_ORDER                   => 2                
-  DOCC                        => [  ]             
-  DO_DIIS                     => TRUE             
-  DO_LEVEL_SHIFT              => TRUE             
-  DO_SCS                      => FALSE            
-  DO_SOS                      => FALSE            
-  E3_SCALE                    => 0.25             
-  EA_POLES                    => FALSE            
-  EKT_EA                      => FALSE            
-  EKT_IP                      => FALSE            
-  EP_EA_POLES                 => FALSE            
-  EP_IP_POLES                 => FALSE            
-  EP_MAXITER                  => 30               
-  EXTERNAL_POTENTIAL_SYMMETRY => FALSE            
-  E_CONVERGENCE               => 1e-06           !
-  FREEZE_CORE                 => FALSE            
-  FROZEN_DOCC                 => [  ]             
-  FROZEN_UOCC                 => [  ]             
-  INTEGRAL_PACKAGE            => ERD              
-  IP_POLES                    => FALSE            
-  LEVEL_SHIFT                 => 0.02             
-  LINEQ_SOLVER                => CDGESV           
-  LITERAL_CFOUR               => (empty)          
-  MAT_NUM_COLUMN_PRINT        => 5                
-  MAX_MOGRAD_CONVERGENCE      => 0.001            
-  MOGRAD_DAMPING              => 1                
-  MO_DIIS_NUM_VECS            => 6                
-  MO_MAXITER                  => 50               
-  MO_READ                     => FALSE            
-  MO_STEP_MAX                 => 0.5              
-  MO_WRITE                    => FALSE            
-  MP2_OS_SCALE                => 1.2              
-  MP2_SOS_SCALE               => 1.3              
-  MP2_SOS_SCALE2              => 1.2              
-  MP2_SS_SCALE                => 0.333333         
-  MP2_TYPE                    => CONV            !
-  NAT_ORBS                    => FALSE            
-  NUM_FROZEN_DOCC             => 0                
-  NUM_FROZEN_UOCC             => 0                
-  OCC_ORBS_PRINT              => FALSE            
-  OEPROP                      => FALSE            
-  OPT_METHOD                  => ORB_RESP         
-  ORB_OPT                     => FALSE           !
-  ORB_RESP_SOLVER             => PCG              
-  ORTH_TYPE                   => MGS              
-  PCG_BETA_TYPE               => FLETCHER_REEVES  
-  PCG_CONVERGENCE             => 1e-06            
-  PCG_MAXITER                 => 30               
-  PCM                         => FALSE            
-  PCM_SCF_TYPE                => TOTAL            
-  PRINT                       => 1                
-  PRINT_NOONS                 => 3                
-  PROPERTIES                  => [  ]             
-  PROPERTIES_ORIGIN           => [  ]             
-  PUREAM                      => TRUE             
-  RAS1                        => [  ]             
-  RAS2                        => [  ]             
-  RAS3                        => [  ]             
-  RAS4                        => [  ]             
-  RELATIVISTIC                => NO               
-  RELAXED                     => TRUE             
-  REL_BASIS                   => (empty)          
-  RESTRICTED_DOCC             => [  ]             
-  RESTRICTED_UOCC             => [  ]             
-  RMS_MOGRAD_CONVERGENCE      => 1e-06            
-  R_CONVERGENCE               => 1e-05            
-  SCS_TYPE                    => SCS              
-  SOCC                        => [  ]             
-  SOS_TYPE                    => SOS              
-  SYMMETRIZE                  => TRUE             
-  TPDM_ABCD_TYPE              => DIRECT           
-  UNITS                       => ANGSTROMS        
-  WFN                         => SCF              
-  WFN_TYPE                    => OMP2             
-  WRITER_FILE_LABEL           => (empty)          
+*** at Tue Nov 10 14:12:25 2015
 
 
  ============================================================================== 
@@ -623,7 +518,7 @@ Total time:
 	Scaled_SS Correlation Energy (a.u.):    -0.00054816647832
 	Scaled_OS Correlation Energy (a.u.):    -0.03136127669453
 	SCS-MP2 Total Energy (a.u.)        :   -74.68861206683692
-	SOS-MP2 Total Energy (a.u.)        :   -74.69067734008316
+	SOS-MP2 Total Energy (a.u.)        :   -74.65670262366409
 	SCSN-MP2 Total Energy (a.u.)       :   -74.65959694266961
 	SCS-MP2-VDW Total Energy (a.u.)    :   -74.69097690185572
 	SOS-PI-MP2 Total Energy (a.u.)     :   -74.69329077980771
@@ -631,14 +526,14 @@ Total time:
 	MP2 Total Energy (a.u.)            :   -74.68448152034449
 	============================================================================== 
 
-*** tstop() called on knut at Tue Nov 10 12:30:33 2015
+*** tstop() called on knut at Tue Nov 10 14:12:25 2015
 Module time:
 	user time   =       0.06 seconds =       0.00 minutes
-	system time =       0.13 seconds =       0.00 minutes
+	system time =       0.12 seconds =       0.00 minutes
 	total time  =          0 seconds =       0.00 minutes
 Total time:
-	user time   =       1.04 seconds =       0.02 minutes
-	system time =       1.99 seconds =       0.03 minutes
+	user time   =       1.34 seconds =       0.02 minutes
+	system time =       2.14 seconds =       0.04 minutes
 	total time  =          1 seconds =       0.02 minutes
 
 *** PSI4 exiting successfully. Buy a developer a beer!
