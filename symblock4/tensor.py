@@ -5,11 +5,12 @@ from contract  import tensordot
 
 class MultiMap(object):
 
-  def __init__(self, multiaxis, array = None):
+  def __init__(self, multiaxis, array = None, **kwargs):
     if not isinstance(multiaxis, MultiAxis):
       try:    multiaxis = np.prod(multiaxis)
       except: raise ValueError("Array must be initialized with MultiAxis or a tuple of Axis objects")
     self.multiaxis = multiaxis
+    self.kwargs    = kwargs
     self.array     = array
     self.ndim      = multiaxis.ndim
     self.shape     = multiaxis.shape
@@ -18,23 +19,31 @@ class MultiMap(object):
     elif not (isinstance(array, np.ndarray) and array.shape == self.shape and array.dtype == self.dtype):
       raise ValueError("Array must be initialized with ndarray object of shape {:s} and dtype {:s}".format(str(self.shape), type(self.dtype).__name__))
 
+  def iter_keytups(self):
+    for keytup in self.multiaxis.iter_keytups():
+      if self.has_data_at(keytup):
+        yield keytup
+
   def has_data_at(self, keytup): return not self.array[keytup] is None and not 0 in self.array[keytup].shape
   def put_data_at(self, keytup):
-    self.array[keytup] = self.dtype(tuple(arg[key] for arg, key in zip(self.multiaxis.init_args, keytup)))
-    if hasattr(self.dtype, "fill"): self.array[keytup].fill(0)
+    if hasattr(self.dtype, "fill"):
+      self.array[keytup] = self.dtype(tuple(arg[key] for arg, key in zip(self.multiaxis.init_args, keytup)))
+      self.array[keytup].fill(0)
+    else:
+      self.array[keytup] = self.dtype(tuple(arg[key] for arg, key in zip(self.multiaxis.init_args, keytup)), **self.kwargs)
 
   def __getitem__(self, *args): return self.array[args[0]]
   def __setitem__(self, *args):
     if not self.has_data_at(args[0]): self.put_data_at(args[0])
     self.array[args[0]] = args[1]
 
-  def __iter__(self): return (self.array[keytup] for keytup in self.multiaxis.iter_keytups() if self.has_data_at(keytup))
+  def __iter__(self): return (self.array[keytup] for keytup in self.iter_keytups())
   def __str__ (self): return pt.Array2str(self)
   def __repr__(self): return pt.Array2str(self)
   def __pos__ (self): return self
   def __neg__ (self):
     tmp = self.__new__(type(self))
-    tmp.__init__(self.multiaxis, self.transform(lambda arr, kt: -arr[kt]))
+    tmp.__init__(self.multiaxis, self.transform(lambda arr, kt: -arr[kt]), **self.kwargs)
     return tmp
 
   def __add__ (self, other): return self.elementwise_operation(other, "__add__" )
@@ -53,37 +62,30 @@ class MultiMap(object):
       else: raise TypeError("Cannot {:s} Arrays with inconsistent axes\n{:s}\nand\n{:s}".format(operation, str(self.multiaxis), str(other.multiaxis)))
     else:
       try:
-        array = self.transform(lambda arr, kt: getattr(arr[kt], operation)(other.array[kt]))
+        array = self.transform(lambda arr, kt: getattr(arr[kt], operation)(other))
       except: raise ValueError("Cannot {:s} Array and {:s}".format(operation, type(other).__name__))
     tmp = self.__new__(type(self))
-    tmp.__init__(self.multiaxis, array)
+    tmp.__init__(self.multiaxis, array, **self.kwargs)
     return tmp
 
   def transform(self, transformer):
     array = np.empty(self.multiaxis.shape, self.multiaxis.dtype)
-    for keytup in self.multiaxis.iter_keytups():
+    for keytup in self.iter_keytups():
       if self.has_data_at(keytup):
         array[keytup] = transformer(self.array, keytup)
     return array
 
-class Vector(MultiMap):
-
-  def __init__(self, axis, array = None):
-    MultiMap.__init__(self, axis, array)
-    if array is None:
-      for keytup in self.multiaxis.iter_keytups():
-        self.put_data_at(keytup)
-
-  def __getitem__(self, *args): return self.array[args[0]]
-  def __setitem__(self, *args):        self.array[args[0]] = args[1]
-
 class Array(MultiMap):
 
-  def __init__(self, multiaxis, array = None):
-    MultiMap.__init__(self, multiaxis, array)
+  def __init__(self, multiaxis, array = None, **kwargs):
+    MultiMap.__init__(self, multiaxis, array, **kwargs)
     if array is None:
-      for keytup in self.multiaxis.iter_array_keytups():
+      for keytup in self.iter_keytups():
         self.put_data_at(keytup)
+
+  def iter_keytups(self):
+    if 'diagonal' in self.kwargs and self.kwargs['diagonal'] is True: return self.multiaxis.iter_keytups()
+    else: return self.multiaxis.iter_array_keytups()
 
   def has_data_at(self, keytup): return not self.array[keytup] is None and not 0 in self.array[keytup].shape
 
@@ -95,7 +97,7 @@ class Array(MultiMap):
 
   def transform(self, transformer):
     array = np.empty(self.multiaxis.shape, self.multiaxis.dtype)
-    for keytup in self.multiaxis.iter_array_keytups():
+    for keytup in self.iter_keytups():
       array[keytup] = transformer(self.array, keytup)
     return array
 

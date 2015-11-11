@@ -1,7 +1,4 @@
- - Vector object currently breaks unless we define its own axis
-    - should probably be replaced with a "Diag" object that maps two axes into one
  - add slicing
- - matrix diagonals (must allow non-vanishing non-totally-symmetric irrep blocks)
  - broadcasting
  - add O-V blocking -- some kind of "zipped" axis?
       ZipAxis({
