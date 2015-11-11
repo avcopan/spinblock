@@ -1,5 +1,5 @@
 from axisfactory import AxisFactory
-from tensor import Array
+from tensor import Array, Vector
 
 def water_mp2_script(scfwfn, mints):
   nirrep   = scfwfn.nirrep()
@@ -31,9 +31,25 @@ def water_mp2_script(scfwfn, mints):
       for a in range(af.nvir_beta_pi[h]):
         C[0,1][1,1][h,h][mu,a] = Cb.get(h, mu, af.nocc_beta_pi[h] + a)
 
-  '''
   epsilon_a = scfwfn.epsilon_a()
   epsilon_b = scfwfn.epsilon_b()
+  print af.sy_mo
+  e = Vector(af.sy_mo)
+  for ov_block in e:
+    for sp_block in ov_block:
+      for pg_block in sp_block:
+        print pg_block
+  for h in range(nirrep):
+    for i in range(af.nocc_alph_pi[h]):
+      e[0][0][h][i] = epsilon_a.get(h, i)
+    for a in range(af.nvir_alph_pi[h]):                       
+      e[1][0][h][a] = epsilon_a.get(h, af.nocc_alph_pi[h] + a)
+    for i in range(af.nocc_beta_pi[h]):                       
+      e[0][1][h][i] = epsilon_b.get(h, i)
+    for a in range(af.nvir_beta_pi[h]):                       
+      e[1][1][h][a] = epsilon_b.get(h, af.nocc_beta_pi[h] + a)
+
+  '''
   aocc_ax = ax.Axis(naoccpi, np.ndarray)
   bocc_ax = ax.Axis(nboccpi, np.ndarray)
   avir_ax = ax.Axis(navirpi, np.ndarray)

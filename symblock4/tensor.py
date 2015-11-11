@@ -3,7 +3,7 @@ import printer   as pt
 from multiaxis import MultiAxis
 from contract  import tensordot
 
-class Array(object):
+class MultiMap(object):
 
   def __init__(self, multiaxis, array = None):
     if not isinstance(multiaxis, MultiAxis):
@@ -14,24 +14,28 @@ class Array(object):
     self.ndim      = multiaxis.ndim
     self.shape     = multiaxis.shape
     self.dtype     = multiaxis.dtype
-    if array is None:
-      self.array = np.empty(self.shape, self.dtype)
-      for keytup in multiaxis.iter_array_keytups():
-        self.array[keytup] = self.dtype(tuple(init_arg[key] for init_arg, key in zip(multiaxis.init_args, keytup)))
-        if hasattr(self.dtype, "fill"): self.array[keytup].fill(0)
-    elif not isinstance(array, np.ndarray) and array.shape == multiaxis.shape and array.dtype == multiaxis.dtype:
-      raise ValueError("Array must be initialized with ndarray object of shape {:s} and dtype {:s}".format(str(multiaxis.shape), type(multiaxis.dtype).__name__))
+    if array is None: self.array = np.empty(self.shape, self.dtype)
+    elif not (isinstance(array, np.ndarray) and array.shape == self.shape and array.dtype == self.dtype):
+      raise ValueError("Array must be initialized with ndarray object of shape {:s} and dtype {:s}".format(str(self.shape), type(self.dtype).__name__))
 
   def has_data_at(self, keytup): return not self.array[keytup] is None and not 0 in self.array[keytup].shape
+  def put_data_at(self, keytup):
+    self.array[keytup] = self.dtype(tuple(arg[key] for arg, key in zip(self.multiaxis.init_args, keytup)))
+    if hasattr(self.dtype, "fill"): self.array[keytup].fill(0)
 
   def __getitem__(self, *args): return self.array[args[0]]
-  def __setitem__(self, *args):        self.array[args[0]] = args[1]
+  def __setitem__(self, *args):
+    if not self.has_data_at(args[0]): self.put_data_at(args[0])
+    self.array[args[0]] = args[1]
 
-  def __iter__(self): return (self.array[keytup] for keytup in self.multiaxis.iter_array_keytups())
+  def __iter__(self): return (self.array[keytup] for keytup in self.multiaxis.iter_keytups() if self.has_data_at(keytup))
   def __str__ (self): return pt.Array2str(self)
   def __repr__(self): return pt.Array2str(self)
   def __pos__ (self): return self
-  def __neg__ (self): return Array(self.multiaxis, self.transform(lambda arr, kt: -arr[kt]))
+  def __neg__ (self):
+    tmp = self.__new__(type(self))
+    tmp.__init__(self.multiaxis, self.transform(lambda arr, kt: -arr[kt]))
+    return tmp
 
   def __add__ (self, other): return self.elementwise_operation(other, "__add__" )
   def __sub__ (self, other): return self.elementwise_operation(other, "__sub__" )
@@ -41,8 +45,6 @@ class Array(object):
   def __rsub__(self, other): return self.elementwise_operation(other, "__rsub__")
   def __rmul__(self, other): return self.elementwise_operation(other, "__rmul__")
   def __rdiv__(self, other): return self.elementwise_operation(other, "__rdiv__")
-  def __mod__ (self, other): return tensordot(self, other)
-  def __rmod__(self, other): return tensordot(other, self)
 
   def elementwise_operation(self, other, operation):
     if hasattr(other, "multiaxis"):
@@ -53,30 +55,56 @@ class Array(object):
       try:
         array = self.transform(lambda arr, kt: getattr(arr[kt], operation)(other.array[kt]))
       except: raise ValueError("Cannot {:s} Array and {:s}".format(operation, type(other).__name__))
-    return Array(self.multiaxis, array)
+    tmp = self.__new__(type(self))
+    tmp.__init__(self.multiaxis, array)
+    return tmp
 
   def transform(self, transformer):
     array = np.empty(self.multiaxis.shape, self.multiaxis.dtype)
-    for keytup in self.multiaxis.iter_array_keytups(): array[keytup] = transformer(self.array, keytup)
+    for keytup in self.multiaxis.iter_keytups():
+      if self.has_data_at(keytup):
+        array[keytup] = transformer(self.array, keytup)
+    return array
+
+class Vector(MultiMap):
+
+  def __init__(self, axis, array = None):
+    MultiMap.__init__(self, axis, array)
+    if array is None:
+      for keytup in self.multiaxis.iter_keytups():
+        self.put_data_at(keytup)
+
+  def __getitem__(self, *args): return self.array[args[0]]
+  def __setitem__(self, *args):        self.array[args[0]] = args[1]
+
+class Array(MultiMap):
+
+  def __init__(self, multiaxis, array = None):
+    MultiMap.__init__(self, multiaxis, array)
+    if array is None:
+      for keytup in self.multiaxis.iter_array_keytups():
+        self.put_data_at(keytup)
+
+  def has_data_at(self, keytup): return not self.array[keytup] is None and not 0 in self.array[keytup].shape
+
+  def __getitem__(self, *args): return self.array[args[0]]
+  def __setitem__(self, *args):        self.array[args[0]] = args[1]
+
+  def __mod__ (self, other): return tensordot(self, other)
+  def __rmod__(self, other): return tensordot(other, self)
+
+  def transform(self, transformer):
+    array = np.empty(self.multiaxis.shape, self.multiaxis.dtype)
+    for keytup in self.multiaxis.iter_array_keytups():
+      array[keytup] = transformer(self.array, keytup)
     return array
 
   def transpose(self, axis_keys = None):
     return Array(self.multiaxis.transpose(axis_keys), self.transform(lambda arr, kt: arr[kt].transpose(axis_keys)).transpose(axis_keys))
   T = property(transpose, None)
 
-  def dot(self, other, axis_keys = None):
-    if not isinstance(other, Array):
-      raise TypeError ("dot (matrix muliplication) of Array with {:s} is undefined.".format(type(other).__name__))
-    col_multiaxis = np.prod(self.multiaxis.axes[:-1])
-    row_multiaxis = np.prod(other.multiaxis.axes[:-2] + other.multiaxis.axes[-2:][1:])
-    dot_axis = other.multiaxis.axes[-1] if other.multiaxis.ndim is 1 else other.multiaxis.axes[-2]
-    if not self.multiaxis.axes[-1] == dot_axis:
-      raise ValueError("dot (matrix multiplication): cannot dot {:s} against {:s}.".format(str(self.multiaxis.axes[-1]), str(dot_axis)))
 
-    
-
-
-def test1():
+if __name__ == "__main__":
   import axis as ax
   import numpy as np
   a = ax.Axis((7,), np.ndarray)
@@ -98,21 +126,6 @@ def test1():
           A[h1,h2,h3,h4][i1,i2,i3,i4] = a[j1,j2,j3,j4]
           B[h3,h4,h1,h2][i3,i4,i1,i2] = b[j3,j4,j1,j2]
 
-  col_axes = A.multiaxis.axes[:2]
-  trc_axes = A.multiaxis.axes[2:]
-  row_axes = B.multiaxis.axes[2:]
-
-  C = Array(col_axes + row_axes)
-
-  for col in np.prod(col_axes).iter_array_keytups():
-    for row in np.prod(row_axes).iter_array_keytups():
-      for trc in MultiAxis(trc_axes).iter_array_keytups():
-        if not (0 in A[col+trc].shape or 0 in B[trc+row].shape):
-          C[col+row] += np.tensordot(A[col+trc], B[trc+row], axes=((2,3),(0,1)))
+  C = tensordot(A, B, axis_keys=((2,3),(0,1)))
 
   print np.linalg.norm(C[0,0,0,0] - c)
-
-
-
-if __name__ == "__main__":
-  test1()
