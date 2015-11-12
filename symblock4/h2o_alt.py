@@ -44,6 +44,11 @@ def water_mp2_script(scfwfn, mints):
     for a in range(af.nvir_beta_pi[h]):                       
       e[1][1][h][a] = epsilon_b.get(h, af.nocc_beta_pi[h] + a)
 
+  for ov_blk in e:
+    for sp_blk in ov_blk:
+      for pg_blk in sp_blk:
+        print pg_blk
+
   import broadcast as bd
 
   d = bd.broadcast(e, af.sy_mo*af.sy_mo)
