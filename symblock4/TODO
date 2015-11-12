@@ -1,9 +1,3 @@
+ - allow contractions to controll the order of output axes, like broadcasting does
  - add slicing
- - broadcasting
- - add O-V blocking -- some kind of "zipped" axis?
-      ZipAxis({
-        "O": SpinAxis(U, (IrrepAxis(C2v, (3, 0, 1, 1), ndarray), IrrepAxis(C2v, (3, 0, 0, 1), ndarray)), Array),
-        "V": SpinAxis(U, (IrrepAxis(C2v, (1, 0, 0, 1), ndarray), IrrepAxis(C2v, (1, 0, 1, 1), ndarray)), Array)
-      })
-   as long as the axis types match, this would allow you to generalize pretty easily to multiple subspaces
  - add antisymmetry
