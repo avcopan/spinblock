@@ -20,6 +20,8 @@ class Axis(MultiAxis):
   def __str__ (self): return pt.Axis2str(self)
   def __repr__(self): return pt.Axis2str(self)
 
+  def __getitem__(self, args): return self.elem_init_args.__getitem__(args)
+
   def prod(self, other, swap = False):
     self, other = (self,), (other,) if not hasattr(other, "axes") else other.axes
     return MultiAxis(other + self) if swap else MultiAxis(self + other)

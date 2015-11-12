@@ -44,56 +44,26 @@ def water_mp2_script(scfwfn, mints):
     for a in range(af.nvir_beta_pi[h]):                       
       e[1][1][h][a] = epsilon_b.get(h, af.nocc_beta_pi[h] + a)
 
-  for ov_blk in e:
-    for sp_blk in ov_blk:
-      for pg_blk in sp_blk:
-        print pg_blk
-
+  import numpy as np
   import broadcast as bd
 
-  d = bd.broadcast(e, af.sy_mo*af.sy_mo)
-  for ov_blk in d:
-    for sp_blk in ov_blk:
-      for pg_blk in sp_blk:
-        print pg_blk
-
-  '''
-  aocc_ax = ax.Axis(naoccpi, np.ndarray)
-  bocc_ax = ax.Axis(nboccpi, np.ndarray)
-  avir_ax = ax.Axis(navirpi, np.ndarray)
-  bvir_ax = ax.Axis(nbvirpi, np.ndarray)
-  occ_ax  = ax.Axis((aocc_ax, bocc_ax), Array)
-  vir_ax  = ax.Axis((avir_ax, bvir_ax), Array)
-  e = Array((ax.Axis((occ_ax, vir_ax), Array),))
-  for h in range(nirrep):
-    for i in range(naoccpi[h]):
-      e[0][0][h][i] = epsilon_a.get(h, i)
-    for a in range(navirpi[h]):
-      e[1][0][h][a] = epsilon_a.get(h, naoccpi[h] + a)
-    for i in range(nboccpi[h]):
-      e[0][1][h][i] = epsilon_b.get(h, i)
-    for a in range(nbvirpi[h]):
-      e[1][1][h][a] = epsilon_b.get(h, nboccpi[h] + a)
+  D = Array((af.sy_mo, af.sy_mo, af.sy_mo, af.sy_mo))
+  bcast_axes = (af.sy_mo[0], af.sy_mo[0], af.sy_mo[1], af.sy_mo[1])
+  D[0,0,1,1] = 1./( bd.broadcast(e[0], bcast_axes, axis_keys=(0,)) + bd.broadcast(e[0], bcast_axes, axis_keys=(1,)) \
+                  - bd.broadcast(e[1], bcast_axes, axis_keys=(2,)) - bd.broadcast(e[1], bcast_axes, axis_keys=(3,)))
 
 
-  D = Array((mo, mo, mo, mo))
-  for w1,w2,w3,w4 in D[0,0,1,1].multiaxis.iter_array_keytups():
-    for h1,h2,h3,h4 in D[0,0,1,1][w1,w2,w3,w4].multiaxis.iter_array_keytups():
-      D[0,0,1,1][w1,w2,w3,w4][h1,h2,h3,h4] = 1./(e[0][w1][h1].reshape(-1,1,1,1) + e[0][w2][h2].reshape(1,-1,1,1) - e[1][w3][h3].reshape(1,1,-1,1) - e[1][w4][h4].reshape(1,1,1,-1))
 
   G = np.empty((1,1,1,1), dtype=np.ndarray)
   G[0,0,0,0] = np.array(mints.ao_eri())
-  g_c1 = Array((sp_c1, sp_c1, sp_c1, sp_c1))
-  for w1,w2,w3,w4 in g_c1.multiaxis.iter_array_keytups():
+  g_c1_ao = Array((af.c1_ao, af.c1_ao, af.c1_ao, af.c1_ao))
+  for w1,w2,w3,w4 in g_c1_ao[0,0,0,0].iter_keytups():
     if w1==w2 and w3==w4:
-      g_c1[w1,w2,w3,w4] = Array(g_c1[w1,w2,w3,w4].multiaxis, G)
+      g_c1_ao[0,0,0,0][w1,w2,w3,w4] = Array((af.c1_ao[0][w1], af.c1_ao[0][w2], af.c1_ao[0][w3], af.c1_ao[0][w4]), array=G)
 
-
-  g_c2v = U % (U % g_c1 % U.T).transpose((1,0,3,2)) % U.T
-  g_ao  = g_c2v.transpose((0,2,1,3)) # phys notation
-
-  g = Array((mo, mo, mo, mo))
-  g[0,0,1,1] = C[0,0].T % (C[0,0].T % g_ao % C[0,1]).transpose((1,0,3,2)) % C[0,1]
+  g_sy_ao = U % (U % g_c1_ao % U.T).transpose((1,0,3,2)) % U.T
+  g = C.T % ( C.T % g_sy_ao % C).transpose((1,0,3,2)) % C
+  g = g.transpose((0,2,1,3)) # phys. notation
 
   T = (g[0,0,1,1] - g[0,0,1,1].transpose((0,1,3,2)))*g[0,0,1,1]*D[0,0,1,1]
 
@@ -109,4 +79,3 @@ def water_mp2_script(scfwfn, mints):
     E += np.sum(os)
 
   print E
-  '''
