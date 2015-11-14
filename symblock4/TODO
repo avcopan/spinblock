@@ -1,3 +1,2 @@
- - allow contractions to controll the order of output axes, like broadcasting does
  - add slicing
  - add antisymmetry

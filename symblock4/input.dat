@@ -5,7 +5,7 @@ molecule {
   H 1 0.96 2 104.5
 }
 
-set basis sto-3g
+set basis cc-pvdz
 set reference uhf
 set scf_type pk
 set df_scf_guess false
@@ -20,5 +20,4 @@ mints  = psi4.MintsHelper()
 water_mp2_script(scfwfn, mints)
 
 
-set mp2_type conv
-energy('mp2')
+energy('cepa0')

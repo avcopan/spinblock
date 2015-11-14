@@ -64,20 +64,19 @@ def water_mp2_script(scfwfn, mints):
   g_sy_ao = ct.eindot('pqrs', (g_c1_ao,'PQRS'), (U,'pP'), (U,'qQ'), (U,'rR'), (U,'sS'))
   g       = ct.eindot('pqrs', (g_sy_ao,'PQRS'), (C,'Pp'), (C,'Qq'), (C,'Rr'), (C,'Ss'))
 
-  g = g.transpose((0,2,1,3)) - g.transpose((0,2,3,1)) # phys. antisymmetrized
-  t = g[0,0,1,1] * D
+  g = g.transpose((0,2,1,3)) # phys. notation
 
-  for i in range(50):
-    I = ct.eindot('ijab', (g[0,1,1,0], 'kbcj'), (t,'ikac'))
-    print I.multiaxis
-    t = g[0,0,1,1] + 1./2 * ct.eindot('ijab', (g[1,1,1,1],'abcd'), (t,'ijcd')) \
-                   + 1./2 * ct.eindot('ijab', (g[0,0,0,0],'klij'), (t,'klab'))
-    t = D * (t + I.transpose((0,1,2,3)) - I.transpose((1,0,2,3)) - I.transpose((0,1,3,2)) + I.transpose((1,0,3,2)) )
+  T = (g[0,0,1,1] - g[0,0,1,1].transpose((0,1,3,2)))*g[0,0,1,1]*D
 
-  term = g[0,0,1,1] * t
   E = 0.0
-  for sp_blk in term:
-    for pg_blk in sp_blk:
-      E += np.sum(pg_blk)
-  E /= 4
+
+  for alpha_ss in T[0,0,0,0]:
+    E += 0.5*np.sum(alpha_ss)
+
+  for beta_ss  in T[1,1,1,1]:
+    E += 0.5*np.sum(beta_ss)
+
+  for os in T[0,1,0,1]:
+    E += np.sum(os)
+
   print E
