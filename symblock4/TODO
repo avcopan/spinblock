@@ -1,4 +1,5 @@
  - TURN OFF ARRAY RECURSION FOR SHAPE = ()
+ - allow disk storage with memmap
  - add slicing
  - add antisymmetry
  - allow scalar return values
