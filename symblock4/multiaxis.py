@@ -10,10 +10,16 @@ class MultiAxis(object):
       except: axes = (axes,)
     self.axes      = axes
     self.ndim      = len(axes)
-    self.dtype     = self.select_common_attribute("elem_dtype")
-    self.shape     = tuple(axis.nelem          for axis in axes)
-    self.keys      = tuple(axis.elem_keys      for axis in axes)
-    self.init_args = tuple(axis.elem_init_args for axis in axes)
+    if self.ndim is 0:
+      self.dtype     = np.ndarray
+      self.shape     = ()
+      self.keys      = ()
+      self.init_args = ()
+    else:
+      self.dtype     = self.select_common_attribute("elem_dtype")
+      self.shape     = tuple(axis.nelem          for axis in axes)
+      self.keys      = tuple(axis.elem_keys      for axis in axes)
+      self.init_args = tuple(axis.elem_init_args for axis in axes)
 
   def __eq__(self, other): return self.axes == other.axes
   def __ne__(self, other): return self.axes != other.axes
@@ -23,7 +29,9 @@ class MultiAxis(object):
 
   def transpose(self, axis_keys = None):
     if axis_keys is None: axis_keys = tuple(reversed(range(self.ndim)))
-    return np.prod([self.axes[axis_key] for axis_key in axis_keys])
+    tmp = self.__new__(type(self))
+    tmp.__init__(tuple(self.axes[axis_key] for axis_key in axis_keys))
+    return tmp
 
   def iter_array_keytups(self):           return it.product(*self.keys)
   def iter_keytups(self):                 return it.product(*self.keys)
@@ -31,8 +39,11 @@ class MultiAxis(object):
 
   def select_common_attribute(self, attr_name):
     attrs = set(getattr(axis, attr_name) for axis in self.axes)
-    try:    attr, = attrs; return attr
-    except: raise ValueError("Can't make MultiAxis from axes with mismatched {:s} values {:s}".format(attr_name, tuple(attrs)))
+    if len(attrs) > 0:
+      try:    attr, = attrs; return attr
+      except: raise ValueError("Can't make MultiAxis from axes with mismatched {:s} values {:s}".format(attr_name, tuple(attrs)))
+    else:
+      return None
 
 from symmetry import XOR, PG_DIM
 
@@ -85,3 +96,9 @@ if __name__ == "__main__":
   print type(a*a*a)
   print type(a*a*a) == type(a*a*a)
 
+  a = MultiAxis(())
+  print a.transpose()
+  b = a.transpose()
+  for i in b.iter_keytups():
+    print "HI"
+    print i

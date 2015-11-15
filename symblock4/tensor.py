@@ -7,8 +7,10 @@ class MultiMap(object):
 
   def __init__(self, multiaxis, array = None, **kwargs):
     if not isinstance(multiaxis, MultiAxis):
-      try:    multiaxis = np.prod(multiaxis)
-      except: raise ValueError("Array must be initialized with MultiAxis or a tuple of Axis objects")
+      if hasattr(multiaxis, "__len__") and multiaxis.__len__() is 0: multiaxis = MultiAxis(())
+      else:
+        try:    multiaxis = np.prod(multiaxis)
+        except: raise ValueError("Array must be initialized with MultiAxis or a tuple of Axis objects")
     self.multiaxis = multiaxis
     self.kwargs    = kwargs
     self.array     = array
@@ -20,7 +22,7 @@ class MultiMap(object):
       raise ValueError("Array must be initialized with ndarray object of shape {:s} and dtype {:s}".format(str(self.shape), type(self.dtype).__name__))
 
   def iter_keytups(self):
-    for keytup in self.multiaxis.iter_keytups():
+    for keytup in self.multiaxis.iter_array_keytups():
       if self.has_data_at(keytup):
         yield keytup
 
@@ -108,26 +110,11 @@ class Array(MultiMap):
 
 if __name__ == "__main__":
   import axis as ax
-  import numpy as np
-  a = ax.Axis((7,), np.ndarray)
-  ia = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
-  A = Array(a*a*ia*ia)
-  B = Array(ia*ia*a*a)
-
-  a = np.random.rand(7,7,7,7)
-  b = np.random.rand(7,7,7,7)
-  c = np.tensordot(a, b, axes=((2,3),(0,1)))
-
-  it_a  = zip(range(1),(slice(7),),(slice(7),))
-  it_ia = zip(range(4),(slice(4),slice(0),slice(1),slice(2)),(slice(0,4),slice(4,4),slice(4,5),slice(5,7)))
-
-  for h1, i1, j1 in it_a:
-    for h2, i2, j2 in it_a:
-      for h3, i3, j3 in it_ia:
-        for h4, i4, j4 in it_ia:
-          A[h1,h2,h3,h4][i1,i2,i3,i4] = a[j1,j2,j3,j4]
-          B[h3,h4,h1,h2][i3,i4,i1,i2] = b[j3,j4,j1,j2]
-
-  C = tensordot(A, B, axis_keys=((2,3),(0,1)))
-
-  print np.linalg.norm(C[0,0,0,0] - c)
+  import broadcast as bd
+  a = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
+  A = Array((a,), None, diagonal=True)
+  B = bd.broadcast(A, (a,a), axis_keys=(0,))
+  print B.multiaxis
+  B += 1
+  for blk in B:
+    print blk

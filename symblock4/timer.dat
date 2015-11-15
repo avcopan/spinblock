@@ -2389,3 +2389,381 @@ W int       :       0.00u       0.04s       0.00w      7 calls
 CEPA Energy :       0.00u       0.01s       0.00w      7 calls
 
 ***********************************************************
+
+Host: knut
+
+Timers On : Sun Nov 15 13:34:04 2015
+Timers Off: Sun Nov 15 13:34:33 2015
+
+Wall Time:       29.00 seconds
+
+Form H      :       0.00u       0.02s       0.00w      2 calls
+Form S/X    :       0.00u       0.00s       0.00w      2 calls
+Guess       :       0.00u       0.00s       0.00w      2 calls
+Form G      :       0.01u       0.01s       0.00w     24 calls
+JK: D       :       0.00u       0.00s       0.00w     24 calls
+JK: JK      :       0.01u       0.01s       0.00w     24 calls
+Form F      :       0.00u       0.00s       0.00w     24 calls
+DIIS        :       0.01u       0.02s       0.00w     24 calls
+DIISManager::add_entry:       0.00u       0.00s       0.00w     31 calls
+Form C      :       0.00u       0.03s       0.00w     24 calls
+Form D      :       0.00u       0.01s       0.00w     24 calls
+DIISManager::extrapolate:       0.01u       0.01s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.01s       0.00w     28 calls
+DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w     28 calls
+trans_ints  :       0.08u       0.18s       0.00w      1 call
+Trans (OO|OO):       0.01u       0.04s       0.00w      1 call
+Trans (OO|OV):       0.00u       0.00s       0.00w      1 call
+Trans (OO|VV):       0.00u       0.01s       0.00w      1 call
+Trans (OV|OO):       0.02u       0.01s       0.00w      1 call
+Trans (OV|OV):       0.01u       0.01s       0.00w      1 call
+Trans (OV|VV):       0.00u       0.00s       0.00w      1 call
+Trans (VV|OO):       0.01u       0.06s       0.00w      1 call
+Trans (VV|OV):       0.00u       0.02s       0.00w      1 call
+Trans (VV|VV):       0.02u       0.01s       0.00w      1 call
+Sort chem -> phys:       0.01u       0.01s       0.00w      1 call
+Sort (OO|OO) -> <OO|OO>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|OV) -> <OO|OV>:       0.00u       0.01s       0.00w      1 call
+Sort (OV|OV) -> <OO|VV>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|VV) -> <OV|OV>:       0.01u       0.00s       0.00w      1 call
+Sort (OV|VV) -> <OV|VV>:       0.00u       0.00s       0.00w      1 call
+Sort (VV|VV) -> <VV|VV>:       0.00u       0.00s       0.00w      1 call
+Antisymmetrize integrals:       0.00u       0.01s       0.00w      1 call
+Make <OO||OO>:       0.00u       0.01s       0.00w      1 call
+Make <OO||OV>:       0.00u       0.00s       0.00w      1 call
+Make <OO||VV>:       0.00u       0.00s       0.00w      1 call
+Make <OV||OV>:       0.00u       0.00s       0.00w      1 call
+Trans OEI   :       0.00u       0.00s       0.00w      1 call
+Build Denominators:       0.00u       0.00s       0.00w      1 call
+T2(1)       :       0.01u       0.00s       0.00w      1 call
+MP2 Energy  :       0.00u       0.00s       0.00w      1 call
+T2          :       0.06u       0.15s       0.00w      7 calls
+W int       :       0.00u       0.04s       0.00w      7 calls
+CEPA Energy :       0.00u       0.00s       0.00w      7 calls
+
+***********************************************************
+
+Host: knut
+
+Timers On : Sun Nov 15 13:37:33 2015
+Timers Off: Sun Nov 15 13:38:02 2015
+
+Wall Time:       29.00 seconds
+
+Form H      :       0.00u       0.00s       0.00w      2 calls
+Form S/X    :       0.00u       0.01s       0.00w      2 calls
+Guess       :       0.00u       0.01s       0.00w      2 calls
+Form G      :       0.01u       0.01s       0.00w     24 calls
+JK: D       :       0.00u       0.00s       0.00w     24 calls
+JK: JK      :       0.01u       0.01s       0.00w     24 calls
+Form F      :       0.00u       0.00s       0.00w     24 calls
+DIIS        :       0.00u       0.02s       0.00w     24 calls
+DIISManager::add_entry:       0.01u       0.00s       0.00w     31 calls
+Form C      :       0.02u       0.02s       0.00w     24 calls
+Form D      :       0.00u       0.00s       0.00w     24 calls
+DIISManager::extrapolate:       0.00u       0.02s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.01s       0.00w     28 calls
+DIISManager::extrapolate: form new data:       0.00u       0.01s       0.00w     28 calls
+trans_ints  :       0.07u       0.17s       0.00w      1 call
+Trans (OO|OO):       0.02u       0.03s       0.00w      1 call
+Trans (OO|OV):       0.00u       0.00s       0.00w      1 call
+Trans (OO|VV):       0.00u       0.01s       0.00w      1 call
+Trans (OV|OO):       0.01u       0.02s       0.00w      1 call
+Trans (OV|OV):       0.00u       0.00s       0.00w      1 call
+Trans (OV|VV):       0.00u       0.02s       0.00w      1 call
+Trans (VV|OO):       0.02u       0.03s       0.00w      1 call
+Trans (VV|OV):       0.01u       0.01s       0.00w      1 call
+Trans (VV|VV):       0.01u       0.02s       0.00w      1 call
+Sort chem -> phys:       0.00u       0.02s       0.00w      1 call
+Sort (OO|OO) -> <OO|OO>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|OV) -> <OO|OV>:       0.00u       0.00s       0.00w      1 call
+Sort (OV|OV) -> <OO|VV>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|VV) -> <OV|OV>:       0.00u       0.01s       0.00w      1 call
+Sort (OV|VV) -> <OV|VV>:       0.00u       0.00s       0.00w      1 call
+Sort (VV|VV) -> <VV|VV>:       0.00u       0.01s       0.00w      1 call
+Antisymmetrize integrals:       0.00u       0.01s       0.00w      1 call
+Make <OO||OO>:       0.00u       0.00s       0.00w      1 call
+Make <OO||OV>:       0.00u       0.00s       0.00w      1 call
+Make <OO||VV>:       0.00u       0.01s       0.00w      1 call
+Make <OV||OV>:       0.00u       0.00s       0.00w      1 call
+Trans OEI   :       0.00u       0.00s       0.00w      1 call
+Build Denominators:       0.00u       0.00s       0.00w      1 call
+T2(1)       :       0.00u       0.00s       0.00w      1 call
+MP2 Energy  :       0.00u       0.00s       0.00w      1 call
+T2          :       0.08u       0.12s       0.00w      7 calls
+W int       :       0.00u       0.05s       0.00w      7 calls
+CEPA Energy :       0.00u       0.02s       0.00w      7 calls
+
+***********************************************************
+
+Host: knut
+
+Timers On : Sun Nov 15 13:39:21 2015
+Timers Off: Sun Nov 15 13:39:40 2015
+
+Wall Time:       19.00 seconds
+
+Form H      :       0.00u       0.00s       0.00w      2 calls
+Form S/X    :       0.00u       0.01s       0.00w      2 calls
+Guess       :       0.00u       0.00s       0.00w      2 calls
+Form G      :       0.02u       0.01s       0.00w     24 calls
+JK: D       :       0.00u       0.00s       0.00w     24 calls
+JK: JK      :       0.02u       0.00s       0.00w     24 calls
+Form F      :       0.00u       0.00s       0.00w     24 calls
+DIIS        :       0.01u       0.00s       0.00w     24 calls
+DIISManager::add_entry:       0.00u       0.01s       0.00w     31 calls
+Form C      :       0.00u       0.03s       0.00w     24 calls
+Form D      :       0.00u       0.00s       0.00w     24 calls
+DIISManager::extrapolate:       0.00u       0.00s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.00s       0.00w     28 calls
+DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w     28 calls
+trans_ints  :       0.06u       0.18s       0.00w      1 call
+Trans (OO|OO):       0.02u       0.03s       0.00w      1 call
+Trans (OO|OV):       0.00u       0.00s       0.00w      1 call
+Trans (OO|VV):       0.00u       0.01s       0.00w      1 call
+Trans (OV|OO):       0.00u       0.03s       0.00w      1 call
+Trans (OV|OV):       0.00u       0.00s       0.00w      1 call
+Trans (OV|VV):       0.00u       0.02s       0.00w      1 call
+Trans (VV|OO):       0.01u       0.04s       0.00w      1 call
+Trans (VV|OV):       0.01u       0.00s       0.00w      1 call
+Trans (VV|VV):       0.01u       0.02s       0.00w      1 call
+Sort chem -> phys:       0.01u       0.02s       0.00w      1 call
+Sort (OO|OO) -> <OO|OO>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|OV) -> <OO|OV>:       0.00u       0.00s       0.00w      1 call
+Sort (OV|OV) -> <OO|VV>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|VV) -> <OV|OV>:       0.00u       0.01s       0.00w      1 call
+Sort (OV|VV) -> <OV|VV>:       0.01u       0.00s       0.00w      1 call
+Sort (VV|VV) -> <VV|VV>:       0.00u       0.01s       0.00w      1 call
+Antisymmetrize integrals:       0.00u       0.00s       0.00w      1 call
+Make <OO||OO>:       0.00u       0.00s       0.00w      1 call
+Make <OO||OV>:       0.00u       0.00s       0.00w      1 call
+Make <OO||VV>:       0.00u       0.00s       0.00w      1 call
+Make <OV||OV>:       0.00u       0.00s       0.00w      1 call
+Trans OEI   :       0.00u       0.00s       0.00w      1 call
+Build Denominators:       0.00u       0.00s       0.00w      1 call
+T2(1)       :       0.00u       0.00s       0.00w      1 call
+MP2 Energy  :       0.00u       0.00s       0.00w      1 call
+T2          :       0.06u       0.15s       0.00w      7 calls
+W int       :       0.04u       0.02s       0.00w      7 calls
+CEPA Energy :       0.00u       0.00s       0.00w      7 calls
+
+***********************************************************
+
+Host: knut
+
+Timers On : Sun Nov 15 13:40:23 2015
+Timers Off: Sun Nov 15 13:40:43 2015
+
+Wall Time:       20.00 seconds
+
+Form H      :       0.01u       0.00s       0.00w      2 calls
+Form S/X    :       0.00u       0.01s       0.00w      2 calls
+Guess       :       0.00u       0.01s       0.00w      2 calls
+Form G      :       0.01u       0.00s       0.00w     24 calls
+JK: D       :       0.00u       0.00s       0.00w     24 calls
+JK: JK      :       0.01u       0.00s       0.00w     24 calls
+Form F      :       0.00u       0.00s       0.00w     24 calls
+DIIS        :       0.01u       0.03s       0.00w     24 calls
+DIISManager::add_entry:       0.00u       0.00s       0.00w     31 calls
+Form C      :       0.02u       0.02s       0.00w     24 calls
+Form D      :       0.00u       0.00s       0.00w     24 calls
+DIISManager::extrapolate:       0.00u       0.03s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.02s       0.00w     28 calls
+DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w     28 calls
+trans_ints  :       0.06u       0.21s       0.00w      1 call
+Trans (OO|OO):       0.01u       0.04s       0.00w      1 call
+Trans (OO|OV):       0.00u       0.01s       0.00w      1 call
+Trans (OO|VV):       0.00u       0.00s       0.00w      1 call
+Trans (OV|OO):       0.01u       0.02s       0.00w      1 call
+Trans (OV|OV):       0.00u       0.01s       0.00w      1 call
+Trans (OV|VV):       0.01u       0.01s       0.00w      1 call
+Trans (VV|OO):       0.01u       0.06s       0.00w      1 call
+Trans (VV|OV):       0.00u       0.01s       0.00w      1 call
+Trans (VV|VV):       0.01u       0.03s       0.00w      1 call
+Sort chem -> phys:       0.00u       0.02s       0.00w      1 call
+Sort (OO|OO) -> <OO|OO>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|OV) -> <OO|OV>:       0.00u       0.00s       0.00w      1 call
+Sort (OV|OV) -> <OO|VV>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|VV) -> <OV|OV>:       0.00u       0.01s       0.00w      1 call
+Sort (OV|VV) -> <OV|VV>:       0.00u       0.00s       0.00w      1 call
+Sort (VV|VV) -> <VV|VV>:       0.00u       0.01s       0.00w      1 call
+Antisymmetrize integrals:       0.01u       0.00s       0.00w      1 call
+Make <OO||OO>:       0.00u       0.00s       0.00w      1 call
+Make <OO||OV>:       0.00u       0.00s       0.00w      1 call
+Make <OO||VV>:       0.00u       0.00s       0.00w      1 call
+Make <OV||OV>:       0.01u       0.00s       0.00w      1 call
+Trans OEI   :       0.00u       0.00s       0.00w      1 call
+Build Denominators:       0.00u       0.00s       0.00w      1 call
+T2(1)       :       0.00u       0.01s       0.00w      1 call
+MP2 Energy  :       0.00u       0.00s       0.00w      1 call
+T2          :       0.04u       0.15s       0.00w      7 calls
+W int       :       0.00u       0.04s       0.00w      7 calls
+CEPA Energy :       0.00u       0.03s       0.00w      7 calls
+
+***********************************************************
+
+Host: knut
+
+Timers On : Sun Nov 15 13:41:07 2015
+Timers Off: Sun Nov 15 13:41:11 2015
+
+Wall Time:        4.00 seconds
+
+Form H      :       0.01u       0.00s       0.00w      2 calls
+Form S/X    :       0.00u       0.00s       0.00w      2 calls
+Guess       :       0.00u       0.00s       0.00w      2 calls
+Form G      :       0.01u       0.02s       0.00w     24 calls
+JK: D       :       0.00u       0.00s       0.00w     24 calls
+JK: JK      :       0.01u       0.02s       0.00w     24 calls
+Form F      :       0.00u       0.00s       0.00w     24 calls
+DIIS        :       0.00u       0.01s       0.00w     24 calls
+DIISManager::add_entry:       0.00u       0.00s       0.00w     31 calls
+Form C      :       0.01u       0.02s       0.00w     24 calls
+Form D      :       0.00u       0.01s       0.00w     24 calls
+DIISManager::extrapolate:       0.00u       0.01s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.00s       0.00w     28 calls
+DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w     28 calls
+trans_ints  :       0.10u       0.16s       0.00w      1 call
+Trans (OO|OO):       0.01u       0.03s       0.00w      1 call
+Trans (OO|OV):       0.00u       0.00s       0.00w      1 call
+Trans (OO|VV):       0.01u       0.00s       0.00w      1 call
+Trans (OV|OO):       0.01u       0.02s       0.00w      1 call
+Trans (OV|OV):       0.01u       0.00s       0.00w      1 call
+Trans (OV|VV):       0.01u       0.01s       0.00w      1 call
+Trans (VV|OO):       0.02u       0.05s       0.00w      1 call
+Trans (VV|OV):       0.00u       0.01s       0.00w      1 call
+Trans (VV|VV):       0.02u       0.02s       0.00w      1 call
+Sort chem -> phys:       0.00u       0.02s       0.00w      1 call
+Sort (OO|OO) -> <OO|OO>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|OV) -> <OO|OV>:       0.00u       0.00s       0.00w      1 call
+Sort (OV|OV) -> <OO|VV>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|VV) -> <OV|OV>:       0.00u       0.00s       0.00w      1 call
+Sort (OV|VV) -> <OV|VV>:       0.00u       0.01s       0.00w      1 call
+Sort (VV|VV) -> <VV|VV>:       0.00u       0.01s       0.00w      1 call
+Antisymmetrize integrals:       0.01u       0.00s       0.00w      1 call
+Make <OO||OO>:       0.00u       0.00s       0.00w      1 call
+Make <OO||OV>:       0.00u       0.00s       0.00w      1 call
+Make <OO||VV>:       0.00u       0.00s       0.00w      1 call
+Make <OV||OV>:       0.01u       0.00s       0.00w      1 call
+Trans OEI   :       0.00u       0.00s       0.00w      1 call
+Build Denominators:       0.00u       0.00s       0.00w      1 call
+T2(1)       :       0.00u       0.00s       0.00w      1 call
+MP2 Energy  :       0.00u       0.01s       0.00w      1 call
+T2          :       0.08u       0.11s       0.00w      7 calls
+W int       :       0.00u       0.03s       0.00w      7 calls
+CEPA Energy :       0.00u       0.02s       0.00w      7 calls
+
+***********************************************************
+
+Host: knut
+
+Timers On : Sun Nov 15 16:08:53 2015
+Timers Off: Sun Nov 15 16:08:57 2015
+
+Wall Time:        4.00 seconds
+
+Form H      :       0.01u       0.01s       0.00w      2 calls
+Form S/X    :       0.00u       0.03s       0.00w      2 calls
+Guess       :       0.00u       0.00s       0.00w      2 calls
+Form G      :       0.00u       0.00s       0.00w     24 calls
+JK: D       :       0.00u       0.00s       0.00w     24 calls
+JK: JK      :       0.00u       0.00s       0.00w     24 calls
+Form F      :       0.00u       0.01s       0.00w     24 calls
+DIIS        :       0.00u       0.01s       0.00w     24 calls
+DIISManager::add_entry:       0.00u       0.00s       0.00w     31 calls
+Form C      :       0.01u       0.04s       0.00w     24 calls
+Form D      :       0.00u       0.00s       0.00w     24 calls
+DIISManager::extrapolate:       0.00u       0.01s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.01s       0.00w     28 calls
+DIISManager::extrapolate: form new data:       0.00u       0.00s       0.00w     28 calls
+trans_ints  :       0.08u       0.19s       0.00w      1 call
+Trans (OO|OO):       0.02u       0.04s       0.00w      1 call
+Trans (OO|OV):       0.00u       0.00s       0.00w      1 call
+Trans (OO|VV):       0.00u       0.00s       0.00w      1 call
+Trans (OV|OO):       0.01u       0.02s       0.00w      1 call
+Trans (OV|OV):       0.01u       0.01s       0.00w      1 call
+Trans (OV|VV):       0.00u       0.01s       0.00w      1 call
+Trans (VV|OO):       0.01u       0.05s       0.00w      1 call
+Trans (VV|OV):       0.01u       0.01s       0.00w      1 call
+Trans (VV|VV):       0.01u       0.03s       0.00w      1 call
+Sort chem -> phys:       0.01u       0.02s       0.00w      1 call
+Sort (OO|OO) -> <OO|OO>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|OV) -> <OO|OV>:       0.00u       0.01s       0.00w      1 call
+Sort (OV|OV) -> <OO|VV>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|VV) -> <OV|OV>:       0.00u       0.00s       0.00w      1 call
+Sort (OV|VV) -> <OV|VV>:       0.00u       0.00s       0.00w      1 call
+Sort (VV|VV) -> <VV|VV>:       0.01u       0.01s       0.00w      1 call
+Antisymmetrize integrals:       0.00u       0.00s       0.00w      1 call
+Make <OO||OO>:       0.00u       0.00s       0.00w      1 call
+Make <OO||OV>:       0.00u       0.00s       0.00w      1 call
+Make <OO||VV>:       0.00u       0.00s       0.00w      1 call
+Make <OV||OV>:       0.00u       0.00s       0.00w      1 call
+Trans OEI   :       0.00u       0.00s       0.00w      1 call
+Build Denominators:       0.00u       0.00s       0.00w      1 call
+T2(1)       :       0.00u       0.01s       0.00w      1 call
+MP2 Energy  :       0.00u       0.00s       0.00w      1 call
+T2          :       0.08u       0.15s       0.00w      7 calls
+W int       :       0.01u       0.03s       0.00w      7 calls
+CEPA Energy :       0.00u       0.01s       0.00w      7 calls
+
+***********************************************************
+
+Host: knut
+
+Timers On : Sun Nov 15 16:09:13 2015
+Timers Off: Sun Nov 15 16:09:34 2015
+
+Wall Time:       21.00 seconds
+
+Form H      :       0.00u       0.01s       0.00w      2 calls
+Form S/X    :       0.00u       0.00s       0.00w      2 calls
+Guess       :       0.00u       0.00s       0.00w      2 calls
+Form G      :       0.01u       0.02s       0.00w     24 calls
+JK: D       :       0.00u       0.00s       0.00w     24 calls
+JK: JK      :       0.01u       0.02s       0.00w     24 calls
+Form F      :       0.00u       0.00s       0.00w     24 calls
+DIIS        :       0.01u       0.02s       0.00w     24 calls
+DIISManager::add_entry:       0.01u       0.00s       0.00w     31 calls
+Form C      :       0.01u       0.01s       0.00w     24 calls
+Form D      :       0.00u       0.00s       0.00w     24 calls
+DIISManager::extrapolate:       0.00u       0.02s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix setup:       0.00u       0.00s       0.00w     28 calls
+DIISManager::extrapolate: bMatrix pseudoinverse:       0.00u       0.00s       0.00w     28 calls
+DIISManager::extrapolate: form new data:       0.00u       0.02s       0.00w     28 calls
+trans_ints  :       0.06u       0.17s       0.00w      1 call
+Trans (OO|OO):       0.00u       0.04s       0.00w      1 call
+Trans (OO|OV):       0.00u       0.00s       0.00w      1 call
+Trans (OO|VV):       0.00u       0.01s       0.00w      1 call
+Trans (OV|OO):       0.01u       0.02s       0.00w      1 call
+Trans (OV|OV):       0.00u       0.00s       0.00w      1 call
+Trans (OV|VV):       0.01u       0.01s       0.00w      1 call
+Trans (VV|OO):       0.02u       0.03s       0.00w      1 call
+Trans (VV|OV):       0.00u       0.01s       0.00w      1 call
+Trans (VV|VV):       0.01u       0.03s       0.00w      1 call
+Sort chem -> phys:       0.01u       0.01s       0.00w      1 call
+Sort (OO|OO) -> <OO|OO>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|OV) -> <OO|OV>:       0.00u       0.00s       0.00w      1 call
+Sort (OV|OV) -> <OO|VV>:       0.00u       0.00s       0.00w      1 call
+Sort (OO|VV) -> <OV|OV>:       0.00u       0.00s       0.00w      1 call
+Sort (OV|VV) -> <OV|VV>:       0.00u       0.01s       0.00w      1 call
+Sort (VV|VV) -> <VV|VV>:       0.01u       0.00s       0.00w      1 call
+Antisymmetrize integrals:       0.00u       0.01s       0.00w      1 call
+Make <OO||OO>:       0.00u       0.00s       0.00w      1 call
+Make <OO||OV>:       0.00u       0.00s       0.00w      1 call
+Make <OO||VV>:       0.00u       0.00s       0.00w      1 call
+Make <OV||OV>:       0.00u       0.01s       0.00w      1 call
+Trans OEI   :       0.00u       0.00s       0.00w      1 call
+Build Denominators:       0.00u       0.00s       0.00w      1 call
+T2(1)       :       0.00u       0.00s       0.00w      1 call
+MP2 Energy  :       0.00u       0.00s       0.00w      1 call
+T2          :       0.06u       0.16s       0.00w      7 calls
+W int       :       0.00u       0.02s       0.00w      7 calls
+CEPA Energy :       0.00u       0.01s       0.00w      7 calls
+
+***********************************************************

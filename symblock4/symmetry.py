@@ -1,4 +1,4 @@
-def XOR(irreps): return reduce(lambda a, b: a^b, irreps)
+def XOR(irreps): return reduce(lambda a, b: a^b, irreps, 0)
 
 PG_DIM = {
  'D2h': 8,

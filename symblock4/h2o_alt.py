@@ -48,6 +48,7 @@ def water_mp2_script(scfwfn, mints):
   import broadcast as bd
 
   bcast_axes = (af.sy_mo[0], af.sy_mo[0], af.sy_mo[1], af.sy_mo[1])
+  tmp = bd.broadcast(e[0], bcast_axes, axis_keys=(0,))
   D = 1./( bd.broadcast(e[0], bcast_axes, axis_keys=(0,)) + bd.broadcast(e[0], bcast_axes, axis_keys=(1,)) \
          - bd.broadcast(e[1], bcast_axes, axis_keys=(2,)) - bd.broadcast(e[1], bcast_axes, axis_keys=(3,)))
 
@@ -67,17 +68,15 @@ def water_mp2_script(scfwfn, mints):
   g = g.transpose((0,2,1,3)) - g.transpose((0,2,3,1)) # phys. antisymmetrized
   t = g[0,0,1,1] * D
 
+  E0 = 0.0
   for i in range(50):
     I = ct.eindot('ijab', (g[0,1,1,0], 'kbcj'), (t,'ikac'))
-    print I.multiaxis
     t = g[0,0,1,1] + 1./2 * ct.eindot('ijab', (g[1,1,1,1],'abcd'), (t,'ijcd')) \
                    + 1./2 * ct.eindot('ijab', (g[0,0,0,0],'klij'), (t,'klab'))
     t = D * (t + I.transpose((0,1,2,3)) - I.transpose((1,0,2,3)) - I.transpose((0,1,3,2)) + I.transpose((1,0,3,2)) )
 
-  term = g[0,0,1,1] * t
-  E = 0.0
-  for sp_blk in term:
-    for pg_blk in sp_blk:
-      E += np.sum(pg_blk)
-  E /= 4
-  print E
+    E = ct.eindot('', (g[0,0,1,1],'ijab'), (t,'ijab'))[()][()]
+    E /= 4
+    print('{:<3d} {:17.10f} {:17.10f}'.format(i, E, E-E0))
+    if(abs(E-E0) < 1e-9): break
+    E0 = E

@@ -25,7 +25,7 @@ def tensordot(l, r, axis_keys=None):
     for row in row_multiaxis.iter_keytups_against(col):
       for trc in trc_multiaxis.iter_keytups_against(col):
         if T.has_data_at(col+row) and L.has_data_at(trc+col) and R.has_data_at(trc+row):
-          T[col + row] += tensordot(L[trc + col], R[trc + row], transposed_axis_keys)
+          T[col + row] = T[col + row] + tensordot(L[trc + col], R[trc + row], transposed_axis_keys)
   return T
 
 
@@ -41,9 +41,17 @@ def eindot(targetindex, *arrayindexpairs):
   array, index = pairs.pop(0)
   for pair in pairs: array, index = indexdot((array, index), pair)
   pmt = tuple(index.index(char) for char in targetindex)
-  print pmt
   return array.transpose(pmt)
 
 
 if __name__ == "__main__":
-  pass
+  import tensor as tn
+  from axisfactory import AxisFactory
+
+  nsopi    = tuple((4,0,1,2))
+  nalphpi  = tuple((3,0,1,1))
+  nbetapi  = tuple((2,0,1,1))
+  af = AxisFactory("C2v", "U", nsopi, nalphpi, nbetapi)
+  g = tn.Array((af.sy_mo[0], af.sy_mo[0], af.sy_mo[1], af.sy_mo[1])) + 1
+  t = tn.Array((af.sy_mo[0], af.sy_mo[0], af.sy_mo[1], af.sy_mo[1])) + 1
+  E = eindot('', (g,'ijab'), (t,'ijab'))
