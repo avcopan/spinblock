@@ -1,5 +1,6 @@
 import printer
-import itertools as it
+import itertools  as it
+import numpy      as np
 from symmetry import XOR
 
 class MultiAxis(object):
@@ -11,6 +12,7 @@ class MultiAxis(object):
     self.axes = axes
     self.ndim = len(axes)
     self.dtype = self.select_common_attribute("elem_dtype")
+    if self.dtype is None: self.dtype = np.ndarray
     self.pgsym = self.select_common_attribute("label") is not None
     self.shape = tuple(axis.nelem     for axis in axes)
     self.keys  = tuple(axis.elem_keys for axis in axes)

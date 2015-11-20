@@ -8,23 +8,24 @@ def testV__init__V01():
   import numpy as np
   a = ax.Axis((4,0,1,2), np.ndarray)
   ma = MultiAxis((a, a, a))
-  assert( ma.axes  == (ax.Axis((4, 0, 1, 2), np.ndarray),)*3    )
-  assert( ma.ndim  == 3                                         )
-  assert( ma.dtype == np.ndarray                                )
-  assert( ma.pgsym == False                                     )
-  assert( ma.shape == (4, 4, 4)                                 )
-  assert( ma.keys  == ((0, 2, 3), (0, 2, 3), (0, 2, 3))         )
-  assert( ma.inits == ((4, 0, 1, 2), (4, 0, 1, 2), (4, 0, 1, 2)))
+  assert( ma.axes  == (ax.Axis((4, 0, 1, 2), np.ndarray),)*3     )
+  assert( ma.ndim  == 3                                          )
+  assert( ma.dtype == np.ndarray                                 )
+  assert( ma.pgsym == False                                      )
+  assert( ma.shape == (4, 4, 4)                                  )
+  assert( ma.keys  == ((0, 2, 3), (0, 2, 3), (0, 2, 3))          )
+  assert( ma.inits == ((4, 0, 1, 2), (4, 0, 1, 2), (4, 0, 1, 2)) )
 
 def testV__init__V02():
+  import numpy as np
   ma = MultiAxis(())
-  assert( ma.axes  == ()   )
-  assert( ma.ndim  == 0    )
-  assert( ma.dtype == None )
-  assert( ma.pgsym == False)
-  assert( ma.shape == ()   )
-  assert( ma.keys  == ()   )
-  assert( ma.inits == ()   )
+  assert( ma.axes  == ()         )
+  assert( ma.ndim  == 0          )
+  assert( ma.dtype == np.ndarray )
+  assert( ma.pgsym == False      )
+  assert( ma.shape == ()         )
+  assert( ma.keys  == ()         )
+  assert( ma.inits == ()         )
 
 def testV__init__V03():
   import axis as ax
