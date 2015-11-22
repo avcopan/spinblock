@@ -2,21 +2,21 @@ import printer
 import itertools  as it
 import numpy      as np
 from symmetry import XOR
+from axis     import Axis
 
 class MultiAxis(object):
 
   def __init__(self, axes):
-    if not hasattr(axes, "__getitem__"):
-      try:    axes = tuple(axes)
-      except: axes = (axes,)
-    self.axes = axes
-    self.ndim = len(axes)
+    if isinstance(axes, Axis):
+      axes = (axes,)
+    self.axes = tuple(axes)
+    self.ndim = len(self.axes)
     self.dtype = self.select_common_attribute("elem_dtype")
     if self.dtype is None: self.dtype = np.ndarray
     self.pgsym = self.select_common_attribute("label") is not None
-    self.shape = tuple(axis.nelem     for axis in axes)
-    self.keys  = tuple(axis.elem_keys for axis in axes)
-    self.inits = tuple(axis.elem_init for axis in axes)
+    self.shape = tuple(axis.nelem     for axis in self.axes)
+    self.keys  = tuple(axis.elem_keys for axis in self.axes)
+    self.inits = tuple(axis.elem_init for axis in self.axes)
 
   def select_common_attribute(self, attr_name):
     if all(hasattr(axis, attr_name) for axis in self.axes): attrs = set(getattr(axis, attr_name) for axis in self.axes)

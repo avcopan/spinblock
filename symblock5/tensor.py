@@ -1,9 +1,13 @@
 from multiaxis import MultiAxis
+import numpy as np
+import printer
 
 class BlockTensor(object):
 
   kwtypes = {'keys'    : (lambda arg: hasattr   (arg, "__iter__")),
              'diagonal': (lambda arg: isinstance(arg, bool      ))}
+
+  kwrecursive = ['diagonal']
 
   def __init__(self, axes, blkmap = None, **kwargs):
     self.mltx   = MultiAxis(axes)
@@ -21,9 +25,22 @@ class BlockTensor(object):
     else:                           return self.mltx.iter_array()
 
   def init_blocks(self):
-    for keytup in self.iter_keytups():
-      self.blkmap[keytup] = self.dtype( self.mltx[keytup] )
-      if hasattr(self.dtype, "fill"): self.blkmap[keytup].fill(0.0)
+    if self.dtype is BlockTensor:
+      kwargs = {kw: self.kwargs[kw] for kw in self.kwrecursive if kw in self.kwargs}
+      for keytup in self.iter_keytups():
+        self.blkmap[keytup] = self.dtype( self.mltx[keytup], **kwargs )
+    elif issubclass(self.dtype, np.ndarray):
+      for keytup in self.iter_keytups():
+        self.blkmap[keytup] = self.dtype( self.mltx[keytup] )
+        self.blkmap[keytup].fill(0.0)
+    else:
+      raise ValueError('{:s} is an invalid dtype for BlockTensor'.format(self.dtype))
+
+  def __call__(self, *keytup):
+    try:    return self.blkmap.__getitem__(*keytup)
+    except: return self.blkmap.__getitem__( keytup)
+
+  def __str__(self): return printer.BlockTensor2str(self)
 
   def check_kwargs(self):
     for key, arg in self.kwargs.iteritems():
@@ -39,4 +56,5 @@ if __name__ == "__main__":
   tst.testV__init__V03()
   tst.testV__init__V04()
   tst.testV__init__V05()
-
+  tst.testV__init__V06()
+  tst.testV__init__V07()

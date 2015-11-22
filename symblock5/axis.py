@@ -4,13 +4,12 @@ import printer
 class Axis(object):
 
   def __init__(self, elem_init, elem_dtype):
-    if not hasattr(elem_init, "__getitem__"):
-      try:    elem_init = tuple(elem_init)
-      except: elem_init = (elem_init,)
+    if isinstance(elem_init, int) or isinstance(elem_init, Axis):
+      elem_init = (elem_init,)
     self.nelem      = len(elem_init)
     self.elem_init  = tuple(elem_init)
     self.elem_dtype = elem_dtype
-    if elem_dtype is np.ndarray:
+    if issubclass(elem_dtype, np.ndarray):
       self.elem_keys = tuple(key for key in range(self.nelem) if not elem_init[key] is 0)
     else:
       self.elem_keys = tuple(range(self.nelem))

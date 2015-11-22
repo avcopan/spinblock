@@ -20,8 +20,9 @@ def testV__init__V01():
 def testV__init__V02():
   import axis as ax
   import numpy as np
+  from disk      import diskarray
   from multiaxis import MultiAxis
-  a = ax.Axis((4,0,1,2), np.ndarray)
+  a = ax.Axis((4,0,1,2), diskarray )
   T = BlockTensor((a, a))
   blkmap = {(0, 0): np.zeros((4, 4)),
             (0, 2): np.zeros((4, 1)),
@@ -36,15 +37,16 @@ def testV__init__V02():
   assert( T.kwargs           == {}                                             )
   assert( T.ndim             == 2                                              )
   assert( T.shape            == (4, 4)                                         )
-  assert( T.dtype            == np.ndarray                                     )
+  assert( T.dtype            == diskarray                                      )
   assert( len(T.blkmap)      == len(blkmap)                                    )
   assert( all((T.blkmap[key] == blk).all() for key, blk in blkmap.iteritems()) )
 
 def testV__init__V03():
   import axis as ax
   import numpy as np
+  from disk      import diskarray
   from multiaxis import MultiAxis
-  a = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
+  a = ax.IrrepAxis("C2v", (4,0,1,2), diskarray )
   T = BlockTensor((a, a))
   blkmap = {(0, 0): np.zeros((4, 4)),
             (2, 2): np.zeros((1, 1)),
@@ -53,15 +55,16 @@ def testV__init__V03():
   assert( T.kwargs           == {}                                             )
   assert( T.ndim             == 2                                              )
   assert( T.shape            == (4, 4)                                         )
-  assert( T.dtype            == np.ndarray                                     )
+  assert( T.dtype            == diskarray                                      )
   assert( len(T.blkmap)      == len(blkmap)                                    )
   assert( all((T.blkmap[key] == blk).all() for key, blk in blkmap.iteritems()) )
 
 def testV__init__V04():
   import axis as ax
   import numpy as np
+  from disk      import diskarray
   from multiaxis import MultiAxis
-  a = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
+  a = ax.IrrepAxis("C2v", (4,0,1,2), diskarray )
   T = BlockTensor((a,), diagonal=True)
   blkmap = {(0,): np.zeros((4,)),
             (2,): np.zeros((1,)),
@@ -70,15 +73,16 @@ def testV__init__V04():
   assert( T.kwargs           == {'diagonal': True}                             )
   assert( T.ndim             == 1                                              )
   assert( T.shape            == (4,)                                           )
-  assert( T.dtype            == np.ndarray                                     )
+  assert( T.dtype            == diskarray                                      )
   assert( len(T.blkmap)      == len(blkmap)                                    )
   assert( all((T.blkmap[key] == blk).all() for key, blk in blkmap.iteritems()) )
 
 def testV__init__V05():
   import axis as ax
   import numpy as np
+  from disk      import diskarray
   from multiaxis import MultiAxis
-  a = ax.Axis((4,0,1,2), np.ndarray)
+  a = ax.Axis((4,0,1,2), diskarray )
   T = BlockTensor((a, a), keys=[(0, 0), (0, 3), (3, 0)])
   blkmap = {(0, 0): np.zeros((4, 4)),
             (0, 3): np.zeros((4, 2)),
@@ -87,7 +91,7 @@ def testV__init__V05():
   assert( T.kwargs           == {'keys': [(0, 0), (0, 3), (3, 0)]}             )
   assert( T.ndim             == 2                                              )
   assert( T.shape            == (4, 4)                                         )
-  assert( T.dtype            == np.ndarray                                     )
+  assert( T.dtype            == diskarray                                      )
   assert( len(T.blkmap)      == len(blkmap)                                    )
   assert( all((T.blkmap[key] == blk).all() for key, blk in blkmap.iteritems()) )
 
@@ -95,8 +99,9 @@ def testV__init__V05():
 def testV__init__V06():
   import axis as ax
   import numpy as np
+  from disk      import diskarray
   from multiaxis import MultiAxis
-  pg = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
+  pg = ax.IrrepAxis("C2v", (4,0,1,2), diskarray )
   sp = ax.Axis((pg, pg), BlockTensor)
   T = BlockTensor((sp, sp), keys=[(0, 0), (1, 1)])
   print T
@@ -115,12 +120,12 @@ def testV__init__V06():
   assert( T(0,0).kwargs      == {}                                             )
   assert( T(0,0).ndim        == 2                                              )
   assert( T(0,0).shape       == (4, 4)                                         ) 
-  assert( T(0,0).dtype       == np.ndarray                                     )
+  assert( T(0,0).dtype       == diskarray                                      )
   assert( T(1,1).mltx        == MultiAxis((pg, pg))                            )
   assert( T(1,1).kwargs      == {}                                             )
   assert( T(1,1).ndim        == 2                                              )
   assert( T(1,1).shape       == (4, 4)                                         )
-  assert( T(1,1).dtype       == np.ndarray                                     )
+  assert( T(1,1).dtype       == diskarray                                      )
   assert( len(T(0,0).blkmap) == len(blkmap)                                    )
   assert( len(T(1,1).blkmap) == len(blkmap)                                    )
   assert( all((T(0,0)(key)   == blk).all() for key, blk in blkmap.iteritems()) )
@@ -130,8 +135,9 @@ def testV__init__V06():
 def testV__init__V07():
   import axis as ax
   import numpy as np
+  from disk      import diskarray
   from multiaxis import MultiAxis
-  pg = ax.IrrepAxis("C2v", (4,0,1,2), np.ndarray)
+  pg = ax.IrrepAxis("C2v", (4,0,1,2), diskarray )
   sp = ax.Axis((pg, pg), BlockTensor)
   T = BlockTensor(sp, diagonal=True)
   print T
@@ -150,12 +156,12 @@ def testV__init__V07():
   assert( T(0).kwargs      == {'diagonal': True}                             )
   assert( T(0).ndim        == 1                                              )
   assert( T(0).shape       == (4,)                                           )
-  assert( T(0).dtype       == np.ndarray                                     )
+  assert( T(0).dtype       == diskarray                                      )
   assert( T(1).mltx        == MultiAxis(pg)                                  )
   assert( T(1).kwargs      == {'diagonal': True}                             )
   assert( T(1).ndim        == 1                                              )
   assert( T(1).shape       == (4,)                                           )
-  assert( T(1).dtype       == np.ndarray                                     ) 
+  assert( T(1).dtype       == diskarray                                      ) 
   assert( len(T(0).blkmap) == len(blkmap)                                    )
   assert( len(T(1).blkmap) == len(blkmap)                                    )
   assert( all((T(0)(key)   == blk).all() for key, blk in blkmap.iteritems()) )
