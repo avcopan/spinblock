@@ -4,23 +4,31 @@ from tempfile import mkdtemp
 
 class diskarray(np.memmap):
 
-  def __new__(cls, shape):
-    filename = os.path.join(mkdtemp(), 'diskarray.bin')
-    return super(diskarray, cls).__new__(cls, filename, dtype=np.float64, mode='w+', shape=shape)
+  def __new__(cls, shape, name = 'tmp'):
+    if name is 'tmp': filename = os.path.join(mkdtemp(), 'diskarray.bin')
+    else:             filename = os.path.join('/tmp', name + '.bin')
+    if os.path.isfile(filename):
+      return super(diskarray, cls).__new__(cls, filename, dtype=np.float64, mode='r+', shape=shape)
+    else:
+      return super(diskarray, cls).__new__(cls, filename, dtype=np.float64, mode='w+', shape=shape)
+
+  def __mod__ (self, other):
+    return self.dot(other)
+
+  def __rmod__(self, other):
+    return other.dot(self)
+
+  def dot     (self, other):
+    return np.tensordot(self, other, axes = (self.ndim - 1, 0))
+
 
 if __name__ == "__main__":
-  a = diskarray((5, 5))
-  a.fill(1)
-  print a
-  b = diskarray((5, 5))
-  b.fill(2)
-  print b
-  print type(b)
-  c = a + b
-  print type(c)
-  c[0,0] = 13
-  c[1,1] = 7
+  c = diskarray((2, 3), name = 'myarray')
+  d = diskarray((2, 3), name = 'myarray')
   print c
+  c.fill(1)
+  print d
+  
   import test_disk as tst
   tst.testV__init__V01()
   tst.testV__init__V02()
