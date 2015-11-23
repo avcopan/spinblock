@@ -1,60 +1,46 @@
-from multiaxis import MultiAxis
-import numpy as np
-import printer
+import numpy   as np
+import os.path as osp
+from tempfile import mkdtemp
 
-class BlockTensor(object):
+class tensor(object):
 
-  kwtypes = {'keys'    : (lambda arg: hasattr   (arg, "__iter__")),
-             'diagonal': (lambda arg: isinstance(arg, bool      ))}
+  def __mod__ (self, other):
+    return self.matmul(other)
 
-  kwrecursive = ['diagonal']
+  def __rmod__(self, other):
+    return other.matmul(self)
 
-  def __init__(self, axes, blkmap = None, **kwargs):
-    self.mltx   = MultiAxis(axes)
-    self.kwargs = kwargs
-    self.check_kwargs()
-    self.blkmap = blkmap if not blkmap is None else dict()
-    self.ndim   = self.mltx.ndim
-    self.shape  = self.mltx.shape
-    self.dtype  = self.mltx.dtype
-    if blkmap is None: self.init_blocks()
+  def matmul(self, other):
+    return np.tensordot(self, other, axes = (self.ndim - 1, 0))
 
-  def iter_keytups(self):
-    if   'keys'     in self.kwargs: return self.kwargs['keys']
-    elif 'diagonal' in self.kwargs: return self.mltx.__iter__()
-    else:                           return self.mltx.iter_array()
+  def broadcast(self, shape, axes):
+    ndim = len(shape)
+    if axes is None: axes = range(ndim - self.ndim, ndim)
+    pmt = tuple(key for key in range(ndim) if not key in axes) + tuple(axes)
+    inv, _ = zip(*sorted(enumerate(pmt), key=lambda x:x[1]))
+    return np.broadcast_to(self, tuple(axes[key] for key in pmt)).transpose(inv)
 
-  def init_blocks(self):
-    if self.dtype is BlockTensor:
-      kwargs = {kw: self.kwargs[kw] for kw in self.kwrecursive if kw in self.kwargs}
-      for keytup in self.iter_keytups():
-        self.blkmap[keytup] = self.dtype( self.mltx[keytup], **kwargs )
-    elif issubclass(self.dtype, np.ndarray):
-      for keytup in self.iter_keytups():
-        self.blkmap[keytup] = self.dtype( self.mltx[keytup] )
-        self.blkmap[keytup].fill(0.0)
+
+class coretensor(np.ndarray, tensor):
+
+  def __new__(cls, shape):
+    return super(coretensor, cls).__new__(cls, shape)
+
+
+class disktensor(np.memmap, tensor):
+
+  def __new__(cls, shape, name = 'tmp'):
+    if name is 'tmp': filename = osp.join(mkdtemp(), 'disktensor.bin')
+    else:             filename = osp.join('/tmp', name + '.bin')
+    if osp.isfile(filename):
+      return super(disktensor, cls).__new__(cls, filename, dtype=np.float64, mode='r+', shape=shape)
     else:
-      raise ValueError('{:s} is an invalid dtype for BlockTensor'.format(self.dtype))
-
-  def __call__(self, *keytup):
-    try:    return self.blkmap.__getitem__(*keytup)
-    except: return self.blkmap.__getitem__( keytup)
-
-  def __str__(self): return printer.BlockTensor2str(self)
-
-  def check_kwargs(self):
-    for key, arg in self.kwargs.iteritems():
-      if not key in self.kwtypes   : raise ValueError("Invalid kwarg '{:s}' passed to BlockedTensor.".format(key))
-      if not self.kwtypes[key](arg): raise ValueError("BlockedTensor kwarg '{:s}' has incorrect type '{:s}'.".format(key, type(arg).__name__))
-    
-
+      return super(disktensor, cls).__new__(cls, filename, dtype=np.float64, mode='w+', shape=shape)
 
 if __name__ == "__main__":
-  import test_tensor as tst
-  tst.testV__init__V01()
-  tst.testV__init__V02()
-  tst.testV__init__V03()
-  tst.testV__init__V04()
-  tst.testV__init__V05()
-  tst.testV__init__V06()
-  tst.testV__init__V07()
+  d = disktensor((5, 5), name='myarray')
+  d.fill(0)
+  print d
+  e = disktensor((5, 5), name='myarray')
+  e.fill(7)
+  print d
